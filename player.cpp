@@ -17,11 +17,6 @@ Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
     setPixmap(QPixmap(":/mario/sprites/mario/parado.png"));
     walking = false;
 
-    while(true){
-
-    }
-
-
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
@@ -53,6 +48,16 @@ void Player::keyPressEvent(QKeyEvent *event)
     {
         if(pos().y() + 64 < 600)
             setPos(x(),y()+8);
+    }
+
+    QList<QGraphicsItem *> colliding_item = collidingItems();
+
+    for(int i = 0, n = colliding_item.size(); i < n; i++)
+    {
+        if(typeid(*(colliding_item[i]))== typeid(FloorBlock))
+        {
+            qDebug() << "Item tocou";
+        }
     }
 
 
