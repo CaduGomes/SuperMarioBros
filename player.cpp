@@ -1,54 +1,61 @@
-#include "player.h"
 #include <QGraphicsScene>
+#include <QGraphicsRectItem>
 #include <QObject>
 #include <QGraphicsItem>
 #include <QKeyEvent>
 #include <QDebug>
+#include <QList>
 
+#include "player.h"
+#include "floorblock.h"
+#include "game.h"
 
-Player::Player(QGraphicsItem *parent): QGraphicsRectItem(parent)
+extern Game * game;
+
+Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    qDebug()<<"Construct";
+    setPixmap(QPixmap(":/mario/sprites/mario/parado.png"));
+    walking = false;
+
+    while(true){
+
+    }
+
+
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
 {
-    qDebug()<<"Key press detected";
 
     if(event->key() == Qt::Key_Left)
     {
         // limite para não sair da tela
         if(pos().x() > 0)
-            setPos(x()-10,y());
+            setPos(x()-8,y());
     }
     else if(event->key() == Qt::Key_Right)
     {
-        // limite para não sair da tela
-        if(pos().x() + 100 < 800 )
-            setPos(x()+10,y());
+
+        if(pos().x() + 64 < 800 ) {
+
+            walking = true;
+            setPos(x()+8,y());
+
+        }
     }
     else if(event->key() == Qt::Key_Up)
     {
         if(pos().y() > 0)
-            setPos(x(),y()-10);
+            setPos(x(),y()-8);
     }
+
     else if(event->key() == Qt::Key_Down)
     {
-        qDebug() << pos().y();
-
-        if(pos().y() + 100 < 600)
-            setPos(x(),y()+10);
+        if(pos().y() + 64 < 600)
+            setPos(x(),y()+8);
     }
+
+
 
 }
 
-void Player::jump()
-{
-    setPos(x(),y()-10);
-    if(pos().y() < -10)
-    {
-        scene()->removeItem(this);
-        delete this;
-        qDebug()<<"Bullet removed";
-    }
-}

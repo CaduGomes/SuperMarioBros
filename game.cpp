@@ -19,15 +19,19 @@ Game::Game(QWidget *parent)
     // fixar o tamanho
     setFixedSize(800,600);
 
+
+    floorBlock = new FloorBlock();
+    floorBlock->setPos(0,380);
+    scene->addItem(floorBlock);
+
     // criar o jogador
     player = new Player();
 
-    // definir o tamanho do jogador 100 x 100
-    player->setRect(0,0,100,100);
+//    player->setRect(0,0,64,64);
 
     // definir a posição padrão do jogador para ser em baixo da tela
     // por definição a visualização é centralizada para pegar todos os objetos
-    player->setPos(400,500);
+    player->setPos(0,300);
 
     // colocar o foco no jogador
     player->setFlag(QGraphicsItem::ItemIsFocusable);

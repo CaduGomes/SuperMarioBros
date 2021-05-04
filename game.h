@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include "player.h"
+#include "floorblock.h"
 
 class Game : public QGraphicsView
 {
@@ -13,6 +14,7 @@ public:
 
     QGraphicsScene * scene;
     Player * player;
+    FloorBlock * floorBlock;
 };
 
 #endif // GAME_H
