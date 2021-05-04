@@ -29,20 +29,21 @@ void Player::keyPressEvent(QKeyEvent *event)
     }
     else if(event->key() == Qt::Key_Up)
     {
-            timer->start(50);
-        connect(timer,SIGNAL(timeout()),this,SLOT(jump()));
+        if(pos().y() > 0)
+            setPos(x(),y()-10);
     }
     else if(event->key() == Qt::Key_Down)
     {
-        setPos(x(),y()+10);
+        qDebug() << pos().y();
+
+        if(pos().y() + 100 < 600)
+            setPos(x(),y()+10);
     }
 
 }
 
 void Player::jump()
 {
-
-
     setPos(x(),y()-10);
     if(pos().y() < -10)
     {
