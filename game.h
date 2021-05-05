@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 #include <QWidget>
 #include <QGraphicsScene>
-#include "gamedirector.h"
+#include <QGraphicsRectItem>
 #include "floorblock.h"
 #include <QVector>
 
@@ -12,10 +12,11 @@ class Game : public QGraphicsView
 {
 public:
     Game(QWidget *parent = 0);
-
     QGraphicsScene * scene;
-    GameDirector * gameDirector;
-    QList <FloorBlock*> floorBlockList;
+    void check_mario_center_screen();
+
+private:
+    void moveScreen(double quant);
 };
 
 #endif // GAME_H

@@ -3,14 +3,14 @@
 
 #include <QObject>
 #include <QTimerEvent>
-
+#include "game.h"
 #include "player.h"
 
 class GameDirector : public QObject
 {
     Q_OBJECT
 public:
-    explicit GameDirector(QObject *parent = nullptr);
+    explicit GameDirector(Game * gameScreen = nullptr, QObject *parent = nullptr);
     void timerEvent(QTimerEvent *event);
 
     Player *getPlayer() const;
@@ -18,6 +18,7 @@ public:
 
 private:
     Player *player;
+    Game * game;
 
 signals:
 

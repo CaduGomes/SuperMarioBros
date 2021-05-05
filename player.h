@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include <QObject>
-#include <QGraphicsPolygonItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
 
