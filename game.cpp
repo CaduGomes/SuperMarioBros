@@ -8,7 +8,7 @@ Game::Game(QWidget *parent)
 
     // fixar o tamanho em 800x600, que é infinito por definição
     scene->setSceneRect(0,0,800,600);
-
+    scene->setBackgroundBrush(QBrush("#93bbec"));
     // visualizar o objeto scene (cenario)
     setScene(scene);
 

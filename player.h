@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <QObject>
+#include <QGraphicsPolygonItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
 
@@ -18,7 +19,6 @@ public:
 
     bool getIsMovingRight() const;
     bool getIsMovingLeft() const;
-    bool tonochao;
 private:
     float accl = 1.2;
     float maxSpeed = 10;
@@ -26,6 +26,11 @@ private:
     float velY = 0;
     bool isMovingRight = false;
     bool isMovingLeft = false;
+
+    QGraphicsRectItem * mario_box_bottom;
+    QGraphicsRectItem * mario_box_top;
+    QGraphicsRectItem * mario_box_right;
+    QGraphicsRectItem * mario_box_left;
 };
 
 

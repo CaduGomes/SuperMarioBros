@@ -12,6 +12,16 @@
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
+
+    mario_box_left = new QGraphicsRectItem(-8,1,8,30, this); // Setando hitbox da esquerda
+    mario_box_right = new QGraphicsRectItem(32,1,8,30, this); // Setando hitbox da direita
+    mario_box_top = new QGraphicsRectItem(1,-8,30,8, this); // Setando hitbox do topo
+    mario_box_bottom = new QGraphicsRectItem(1,32,30,8, this); // Setando hitbox de baixo
+
+    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    mario_box_left->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    mario_box_top->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    mario_box_right->setPen(Qt::NoPen); // Removendo pintura das hitboxes
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
@@ -63,32 +73,26 @@ void Player::movePlayer()
 
 void Player::gravity()
 {
-    qDebug() << tonochao;
 
-    QList<QGraphicsItem *> colliding_item = collidingItems();
-
-    if(colliding_item.size() == 0){
-        tonochao = false;
-    }
-
-    for(int i = 0, n = colliding_item.size(); i < n; i++)
+    for(QGraphicsItem *colliding_item : mario_box_bottom->collidingItems())
     {
-        if(typeid(*(colliding_item[i])) == typeid(FloorBlock))
+
+        if(typeid(*colliding_item) == typeid(FloorBlock))
         {
-            tonochao = true;
+            int yBlock = colliding_item->y() - 32;
+
+            qDebug() << yBlock;
+            int distance = yBlock - y();
+            qDebug() << distance;
+            setPos(x(), y()+distance);
+
+            return;
         }
     }
 
 
-    if(!tonochao){
-        setPos(x(), y()+8);
-        return;
-    }
+    setPos(x(), y()+6);
 
-    if(tonochao){
-        setPos(x(), 300);
-        return;
-    }
 
 }
 

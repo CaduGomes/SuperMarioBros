@@ -2,13 +2,13 @@
 
 GameDirector::GameDirector(QObject *parent) : QObject(parent)
 {
+    startTimer(1000/33);
     player = new Player();
-    startTimer(30);
-    player->setPos(0,0);
+    player->setPos(50,200);
     // colocar o foco no jogador
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
-    // adicionar o jogad
+    // adicionar o jogador
 }
 
 void GameDirector::timerEvent(QTimerEvent *event)
