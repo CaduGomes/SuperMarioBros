@@ -15,8 +15,31 @@ extern Game * game;
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/mario/sprites/mario/parado.png"));
-    walking = false;
 
+}
+
+void Player::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Left)
+    {
+        isMovingLeft = true;
+    }
+    else if (event->key() == Qt::Key_Right)
+    {
+        isMovingRight = true;
+    }
+}
+
+void Player::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Left)
+    {
+        isMovingLeft = false;
+    }
+    else if (event->key() == Qt::Key_Right)
+    {
+        isMovingRight = false;
+    }
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
@@ -32,10 +55,7 @@ void Player::keyPressEvent(QKeyEvent *event)
     {
 
         if(pos().x() + 64 < 800 ) {
-
-            walking = true;
             setPos(x()+8,y());
-
         }
     }
     else if(event->key() == Qt::Key_Up)
@@ -59,8 +79,37 @@ void Player::keyPressEvent(QKeyEvent *event)
             qDebug() << "Item tocou";
         }
     }
+}
 
+void Player::movePlayer()
+{
+    if (isMovingLeft)
+    {
+        velX -= velX >= maxSpeed * -1 ? accl : 0;
+    }
+    else if (isMovingRight)
+    {
+        velX += velX <= maxSpeed ? accl : 0;
+    }
+    else if (!isMovingLeft && !isMovingRight && velX < 0)
+    {
+        velX += accl;
+    }
+    else if (!isMovingLeft && !isMovingRight && velX > 0)
+    {
+        velX -= accl;
+    }
 
+    setPos(x() + velX, y());
+}
 
+bool Player::getIsMovingRight() const
+{
+    return isMovingRight;
+}
+
+bool Player::getIsMovingLeft() const
+{
+    return isMovingLeft;
 }
 

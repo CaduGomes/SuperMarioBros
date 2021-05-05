@@ -11,12 +11,14 @@ CONFIG += c++11
 SOURCES += \
     floorblock.cpp \
     game.cpp \
+    gamedirector.cpp \
     main.cpp \
     player.cpp
 
 HEADERS += \
     floorblock.h \
     game.h \
+    gamedirector.h \
     player.h
 
 FORMS +=
