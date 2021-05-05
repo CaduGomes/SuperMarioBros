@@ -8,25 +8,10 @@
 
 #include "player.h"
 #include "floorblock.h"
-#include "game.h"
-
-extern Game * game;
 
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
-
-//    QList<QGraphicsItem *> colliding_item = collidingItems();
-
-//    for(int i = 0, n = colliding_item.size(); i < n; i++)
-//    {
-//        if(typeid(*(colliding_item[i]))== typeid(FloorBlock))
-//        {
-//            qDebug() << "Item tocou";
-//        }
-//    }
-
-
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
@@ -53,7 +38,6 @@ void Player::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-
 void Player::movePlayer()
 {
 
@@ -75,6 +59,37 @@ void Player::movePlayer()
     }
 
     setPos(x() + velX, y());
+}
+
+void Player::gravity()
+{
+    qDebug() << tonochao;
+
+    QList<QGraphicsItem *> colliding_item = collidingItems();
+
+    if(colliding_item.size() == 0){
+        tonochao = false;
+    }
+
+    for(int i = 0, n = colliding_item.size(); i < n; i++)
+    {
+        if(typeid(*(colliding_item[i])) == typeid(FloorBlock))
+        {
+            tonochao = true;
+        }
+    }
+
+
+    if(!tonochao){
+        setPos(x(), y()+8);
+        return;
+    }
+
+    if(tonochao){
+        setPos(x(), 300);
+        return;
+    }
+
 }
 
 bool Player::getIsMovingRight() const

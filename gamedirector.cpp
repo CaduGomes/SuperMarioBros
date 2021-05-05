@@ -4,7 +4,7 @@ GameDirector::GameDirector(QObject *parent) : QObject(parent)
 {
     player = new Player();
     startTimer(30);
-    player->setPos(0,300);
+    player->setPos(0,0);
     // colocar o foco no jogador
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
@@ -14,6 +14,7 @@ GameDirector::GameDirector(QObject *parent) : QObject(parent)
 void GameDirector::timerEvent(QTimerEvent *event)
 {
     player->movePlayer();
+    player->gravity();
 }
 
 Player *GameDirector::getPlayer() const

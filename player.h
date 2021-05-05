@@ -14,14 +14,16 @@ public:
     void keyPressEvent(QKeyEvent * event);
     void keyReleaseEvent(QKeyEvent * event);
     void movePlayer();
+    void gravity();
 
     bool getIsMovingRight() const;
     bool getIsMovingLeft() const;
-
+    bool tonochao;
 private:
     float accl = 1.2;
     float maxSpeed = 10;
     float velX = 0;
+    float velY = 0;
     bool isMovingRight = false;
     bool isMovingLeft = false;
 };

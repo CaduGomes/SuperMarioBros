@@ -19,7 +19,7 @@ Game::Game(QWidget *parent)
     // fixar o tamanho
     setFixedSize(800,600);
 
-    for(int i=0;i < 25;i++){
+    for(int i=0;i < 12;i++){
 
        FloorBlock *block = new FloorBlock();
        block->setPos((i * 32),332);
