@@ -1,6 +1,6 @@
 #include "floorblock.h"
 
-FloorBlock::FloorBlock(QGraphicsItem *parent): QGraphicsRectItem(parent)
+FloorBlock::FloorBlock(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    setRect(0,0,64,64);
+    setPixmap(QPixmap(":/world/sprites/world/floor-block.png"));
 }

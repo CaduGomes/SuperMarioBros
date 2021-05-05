@@ -19,8 +19,8 @@ public:
     bool getIsMovingLeft() const;
 
 private:
-    float accl = 1.5;
-    float maxSpeed = 20;
+    float accl = 1.2;
+    float maxSpeed = 10;
     float velX = 0;
     bool isMovingRight = false;
     bool isMovingLeft = false;

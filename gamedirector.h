@@ -2,6 +2,8 @@
 #define GAMEDIRECTOR_H
 
 #include <QObject>
+#include <QTimerEvent>
+
 #include "player.h"
 
 class GameDirector : public QObject

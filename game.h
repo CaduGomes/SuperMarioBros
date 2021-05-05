@@ -4,8 +4,9 @@
 #include <QGraphicsView>
 #include <QWidget>
 #include <QGraphicsScene>
-#include "player.h"
+#include "gamedirector.h"
 #include "floorblock.h"
+#include <QVector>
 
 class Game : public QGraphicsView
 {
@@ -13,8 +14,8 @@ public:
     Game(QWidget *parent = 0);
 
     QGraphicsScene * scene;
-    Player * player;
-    FloorBlock * floorBlock;
+    GameDirector * gameDirector;
+    QList <FloorBlock*> floorBlockList;
 };
 
 #endif // GAME_H

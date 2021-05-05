@@ -19,26 +19,21 @@ Game::Game(QWidget *parent)
     // fixar o tamanho
     setFixedSize(800,600);
 
+    for(int i=0;i < 25;i++){
 
-    floorBlock = new FloorBlock();
-    floorBlock->setPos(0,380);
-    scene->addItem(floorBlock);
+       FloorBlock *block = new FloorBlock();
+       block->setPos((i * 32),332);
+       floorBlockList.push_back(block);
 
-    // criar o jogador
-    player = new Player();
+    }
 
-//    player->setRect(0,0,64,64);
+    for(FloorBlock *b : floorBlockList){
+        scene->addItem(b);
+    }
 
-    // definir a posição padrão do jogador para ser em baixo da tela
-    // por definição a visualização é centralizada para pegar todos os objetos
-    player->setPos(0,300);
 
-    // colocar o foco no jogador
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-
-    // adicionar o jogador no cenario
-    scene->addItem(player);
+    gameDirector = new GameDirector();
+    scene->addItem(gameDirector->getPlayer());
 
     show();
 

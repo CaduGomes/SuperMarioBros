@@ -1,9 +1,10 @@
 <RCC>
     <qresource prefix="/mario">
-        <file>sprites/mario/andando_2.png</file>
         <file>sprites/mario/mario_andando_1.png</file>
+        <file>sprites/mario/mario_andando_2.png</file>
         <file>sprites/mario/mario_andando_3png.png</file>
         <file>sprites/mario/mario_morrendo.png</file>
+        <file>sprites/mario/mario_parado.png</file>
         <file>sprites/mario/mario_pulando.png</file>
         <file>sprites/mario/mario_virando-correndo.png</file>
         <file>sprites/mario/mario-big_andando_1.png</file>
@@ -12,6 +13,8 @@
         <file>sprites/mario/mario-big_parado.png</file>
         <file>sprites/mario/mario-big_pulando.png</file>
         <file>sprites/mario/mario-big_virando-correndo.png</file>
-        <file>sprites/mario/parado.png</file>
+    </qresource>
+    <qresource prefix="/world">
+        <file>sprites/world/floor-block.png</file>
     </qresource>
 </RCC>
