@@ -17,6 +17,7 @@ void GameDirector::timerEvent(QTimerEvent *event)
     player->movePlayer();
     player->gravity();
     game->check_mario_center_screen();
+    player->colliding_block();
 }
 
 Player *GameDirector::getPlayer() const

@@ -7,10 +7,13 @@
 #include <QList>
 
 #include "player.h"
-#include "floorblock.h"
+#include "floor_block.h"
+#include "mystery_block.h"
+#include "brick_block.h"
 
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
-{
+{    
+
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
 
     mario_box_left = new QGraphicsRectItem(-8,1,8,30, this); // Setando hitbox da esquerda
@@ -73,25 +76,44 @@ void Player::movePlayer()
 
 void Player::gravity()
 {
-
     for(QGraphicsItem *colliding_item : mario_box_bottom->collidingItems())
     {
 
-        if(typeid(*colliding_item) == typeid(FloorBlock))
+        if(typeid(*colliding_item) == typeid(Floor_Block))
         {
             int yBlock = colliding_item->y() - 32;
-
-            qDebug() << yBlock;
             int distance = yBlock - y();
-            qDebug() << distance;
             setPos(x(), y()+distance);
-
             return;
         }
     }
 
 
     setPos(x(), y()+6);
+
+
+}
+
+void Player::colliding_block()
+{
+    // Mario colidindo em cima
+    for(QGraphicsItem *colliding_item : mario_box_top->collidingItems())
+    {
+
+        // Colidindo com mystery_block
+        if(typeid(*colliding_item) == typeid(Mystery_Block))
+        {
+            static_cast<Mystery_Block *>(colliding_item)->open_box();
+            return;
+        }
+
+        // Colidindo com brick_block
+        if(typeid(*colliding_item) == typeid(Brick_Block))
+        {
+            static_cast<Brick_Block *>(colliding_item)->open_box();
+            return;
+        }
+    }
 
 
 }

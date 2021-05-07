@@ -5,8 +5,11 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
-#include "floorblock.h"
 #include <QVector>
+
+#include "floor_block.h"
+#include "mystery_block.h"
+#include "brick_block.h"
 
 class Game : public QGraphicsView
 {
@@ -16,6 +19,7 @@ public:
     void check_mario_center_screen();
 
 private:
+    void assemble_screen();
     void moveScreen(double quant);
 };
 

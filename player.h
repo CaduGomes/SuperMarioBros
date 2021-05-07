@@ -15,7 +15,7 @@ public:
     void keyReleaseEvent(QKeyEvent * event);
     void movePlayer();
     void gravity();
-
+    void colliding_block();
     bool getIsMovingRight() const;
     bool getIsMovingLeft() const;
 private:

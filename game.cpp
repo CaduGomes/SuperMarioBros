@@ -19,42 +19,19 @@ Game::Game(QWidget *parent)
     // fixar o tamanho
     setFixedSize(800,400);
 
-    QList <FloorBlock*> floorBlockListTop;
-
-    for(int i=0;i < 100;i++){
-
-        FloorBlock *block = new FloorBlock();
-        block->setPos((i * 32),350);
-        floorBlockListTop.push_back(block);
-
-    }
-
-    for(FloorBlock *b : floorBlockListTop){
-        scene->addItem(b);
-    }
-
-    QList <FloorBlock*> floorBlockListBottom;
-
-    for(int i=0;i < 25;i++){
-
-        FloorBlock *block = new FloorBlock();
-        block->setPos((i * 32),382);
-        floorBlockListBottom.push_back(block);
-
-    }
-
-    for(FloorBlock *b : floorBlockListBottom){
-        scene->addItem(b);
-    }
-
     scene->setStickyFocus(true);
+
+    //Construindo os blocos na tela
+    assemble_screen();
+
+
     show();
 
 }
 
 void Game::moveScreen(double quant)
 {
-    qDebug() << quant;
+
     if(quant > 150){
         scene->setSceneRect(scene->sceneRect().left()+2, 0, 800, 400);
     }else if (quant > 80){
@@ -73,4 +50,57 @@ void Game::check_mario_center_screen()
         double distance = (scene->focusItem()->x() - scene->sceneRect().center().x()) * -1;
         moveScreen(distance);
     }
+}
+
+void Game::assemble_screen()
+{
+    QList <Floor_Block*> floor_blocks;
+
+    for(int i=0;i < 25;i++){
+
+        Floor_Block *block = new Floor_Block();
+        block->setPos((i * 32),352);
+        floor_blocks.push_back(block);
+
+    }
+
+    for(int i=0;i < 25;i++){
+
+        Floor_Block *block = new Floor_Block();
+        block->setPos((i * 32),384);
+        floor_blocks.push_back(block);
+
+    }
+
+    for(Floor_Block *b : floor_blocks){
+        scene->addItem(b);
+    }
+
+     QList <Mystery_Block*> mystery_blocks;
+
+     Mystery_Block *mystery1 = new Mystery_Block(0);
+     mystery1->setPos(500, 288);
+     mystery_blocks.push_back(mystery1);
+
+     Mystery_Block *mystery2 = new Mystery_Block(1);
+     mystery2->setPos(400, 288);
+     mystery_blocks.push_back(mystery2);
+
+
+
+     for(Mystery_Block *m : mystery_blocks){
+         scene->addItem(m);
+     }
+
+     QList <Brick_Block*> brick_blocks;
+
+     Brick_Block *brick1 = new Brick_Block();
+     brick1->setPos(532,288);
+     brick_blocks.push_back(brick1);
+
+
+     for(Brick_Block *b : brick_blocks){
+         scene->addItem(b);
+     }
+
 }
