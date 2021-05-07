@@ -5,7 +5,7 @@ Coin_Object::Coin_Object(qreal x, qreal y, QGraphicsItem *parent): QGraphicsPixm
     setPixmap(QPixmap(":/sprites/objects/coin/1.png"));
     animation_2();
     setZValue(-1);
-    setPos(x,y-32);
+    setPos(x,y-16);
     initial_y = y-32;
 
     timer = new QTimer(this);
@@ -42,7 +42,7 @@ void Coin_Object::increasing_y_animation()
         timer->start(10);
     }else {
         setPos(x(), y()-1-velY);
-        velY += 0.2;
+        velY += 0.1;
     }
 }
 
