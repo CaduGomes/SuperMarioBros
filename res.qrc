@@ -14,7 +14,17 @@
         <file>sprites/mario/mario-big_pulando.png</file>
         <file>sprites/mario/mario-big_virando-correndo.png</file>
     </qresource>
-    <qresource prefix="/world">
-        <file>sprites/world/floor-block.png</file>
+    <qresource prefix="/">
+        <file>sprites/blocks/box_normal.png</file>
+        <file>sprites/blocks/box_open.png</file>
+        <file>sprites/blocks/brick_broken.png</file>
+        <file>sprites/blocks/brick_normal.png</file>
+        <file>sprites/blocks/floor-block.png</file>
+        <file>sprites/objects/power-up.png</file>
+        <file>sprites/objects/coin/1.png</file>
+        <file>sprites/objects/coin/2.png</file>
+        <file>sprites/objects/coin/3.png</file>
+        <file>sprites/objects/coin/4.png</file>
+        <file>sprites/objects/coin/5.png</file>
     </qresource>
 </RCC>
