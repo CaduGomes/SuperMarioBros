@@ -1,9 +1,10 @@
 #include "gamedirector.h"
+#include <QDebug>
 
 GameDirector::GameDirector(Game * gameScreen, QObject *parent) : QObject(parent)
 {
     game = gameScreen;
-    startTimer(1000/33);
+    startTimer(1000/167);
     player = new Player();
     player->setPos(50,200);
     // colocar o foco no jogador

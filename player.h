@@ -19,12 +19,16 @@ public:
     bool getIsMovingRight() const;
     bool getIsMovingLeft() const;
 private:
-    float accl = 1.2;
-    float maxSpeed = 10;
+    float accl = 0.01;
+    float maxSpeed = 1.5;
+    float maxJumpHeight = 60;
     float velX = 0;
     float velY = 0;
+
     bool isMovingRight = false;
     bool isMovingLeft = false;
+    bool isJumping = false;
+    bool isFalling = false;
 
     QGraphicsRectItem * mario_box_bottom;
     QGraphicsRectItem * mario_box_top;

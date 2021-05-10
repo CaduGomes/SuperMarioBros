@@ -15,7 +15,6 @@ Game::Game(QWidget *parent)
     //desabilitar as barras de rolagem
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    qDebug() << scene->sceneRect().left();
     // fixar o tamanho
     setFixedSize(800,400);
 
@@ -31,7 +30,6 @@ Game::Game(QWidget *parent)
 
 void Game::moveScreen(double quant)
 {
-
     if(quant > 150){
         scene->setSceneRect(scene->sceneRect().left()+2, 0, 800, 400);
     }else if (quant > 80){
