@@ -26,5 +26,14 @@
         <file>sprites/objects/coin/3.png</file>
         <file>sprites/objects/coin/4.png</file>
         <file>sprites/objects/coin/5.png</file>
+        <file>sprites/world/big-cloud.png</file>
+        <file>sprites/world/small-cloud.png</file>
+        <file>sprites/world/small-grass.png</file>
+        <file>sprites/world/small-grass_2.png</file>
+        <file>sprites/world/tall-grass.png</file>
+        <file>sprites/world/tall-grass_2.png</file>
+        <file>sprites/world/pipe.png</file>
+        <file>sprites/world/mid-cloud.png</file>
+        <file>sprites/world/mid-grass.png</file>
     </qresource>
 </RCC>

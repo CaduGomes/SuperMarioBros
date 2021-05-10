@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    background_image.cpp \
     brick_block.cpp \
     coin_object.cpp \
     floor_block.cpp \
@@ -17,9 +18,11 @@ SOURCES += \
     main.cpp \
     mushroom_object.cpp \
     mystery_block.cpp \
+    pipe_block.cpp \
     player.cpp
 
 HEADERS += \
+    background_image.h \
     brick_block.h \
     coin_object.h \
     floor_block.h \
@@ -27,6 +30,7 @@ HEADERS += \
     gamedirector.h \
     mushroom_object.h \
     mystery_block.h \
+    pipe_block.h \
     player.h
 
 FORMS +=

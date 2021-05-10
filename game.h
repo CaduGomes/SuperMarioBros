@@ -19,8 +19,14 @@ public:
     void check_mario_center_screen();
 
 private:
-    void assemble_screen();
+    void assemble_blocks();
+    void assemble_scenery();
     void moveScreen(double quant);
+
+    int floor = 416;
+    int lvl1 = 288;
+
+    int lvl2 = 160;
 };
 
 #endif // GAME_H
