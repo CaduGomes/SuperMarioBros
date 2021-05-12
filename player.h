@@ -18,10 +18,13 @@ public:
     void colliding_block();
     bool getIsMovingRight() const;
     bool getIsMovingLeft() const;
+
 private:
     float accl = 0.01;
     float maxSpeed = 1.5;
-    float maxJumpHeight = 60;
+    float jumpCounterMax = 60;
+    float jumpCounter = 0;
+    float gravityMaxSpeed = 3;
     float velX = 0;
     float velY = 0;
 
