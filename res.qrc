@@ -15,8 +15,6 @@
         <file>sprites/mario/mario-big_virando-correndo.png</file>
     </qresource>
     <qresource prefix="/">
-        <file>sprites/blocks/box_normal.png</file>
-        <file>sprites/blocks/box_open.png</file>
         <file>sprites/blocks/brick_broken.png</file>
         <file>sprites/blocks/brick_normal.png</file>
         <file>sprites/blocks/floor-block.png</file>
@@ -35,5 +33,12 @@
         <file>sprites/world/pipe.png</file>
         <file>sprites/world/mid-cloud.png</file>
         <file>sprites/world/mid-grass.png</file>
+        <file>sprites/blocks/terrain-block.png</file>
+        <file>sprites/world/flag.png</file>
+        <file>sprites/world/flag-body.png</file>
+        <file>sprites/blocks/mystery-box/1.png</file>
+        <file>sprites/blocks/mystery-box/2.png</file>
+        <file>sprites/blocks/mystery-box/3.png</file>
+        <file>sprites/blocks/mystery-box/open.png</file>
     </qresource>
 </RCC>

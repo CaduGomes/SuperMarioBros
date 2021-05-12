@@ -4,27 +4,28 @@ extern Game * game;
 
 Mystery_Block::Mystery_Block(int surprise, QGraphicsItem *parent): QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/sprites/blocks/box_normal.png"));
+    setPixmap(QPixmap(":/sprites/blocks/mystery-box/1.png"));
     surprise_selected = surprise;
+    sprite_animation_1();
 }
 
 void Mystery_Block::open_box()
 {
     if(!broken){
         broken = true;
-        setPixmap(QPixmap(":/sprites/blocks/box_open.png"));
-        animation_start();
+        setPixmap(QPixmap(":/sprites/blocks/mystery-box/open.png"));
+        open_animation_start();
     }
 }
 
-void Mystery_Block::animation_start()
+void Mystery_Block::open_animation_start()
 {
     setPos(x(), y()-6);
 
-    QTimer::singleShot(200, this, &Mystery_Block::animation_end);
+    QTimer::singleShot(200, this, &Mystery_Block::open_animation_end);
 }
 
-void Mystery_Block::animation_end()
+void Mystery_Block::open_animation_end()
 {
     setPos(x(), y()+6);
 
@@ -39,4 +40,36 @@ void Mystery_Block::animation_end()
     }
 
 
+}
+
+void Mystery_Block::sprite_animation_1()
+{
+    if(!broken){
+    setPixmap(QPixmap(":/sprites/blocks/mystery-box/1.png"));
+    QTimer::singleShot(500, this, &Mystery_Block::sprite_animation_2);
+    }
+}
+
+void Mystery_Block::sprite_animation_2()
+{
+    if(!broken){
+    setPixmap(QPixmap(":/sprites/blocks/mystery-box/2.png"));
+    QTimer::singleShot(150, this, &Mystery_Block::sprite_animation_3);
+    }
+}
+
+void Mystery_Block::sprite_animation_3()
+{
+    if(!broken){
+    setPixmap(QPixmap(":/sprites/blocks/mystery-box/3.png"));
+    QTimer::singleShot(150, this, &Mystery_Block::sprite_animation_4);
+    }
+}
+
+void Mystery_Block::sprite_animation_4()
+{
+    if(!broken){
+    setPixmap(QPixmap(":/sprites/blocks/mystery-box/2.png"));
+    QTimer::singleShot(150, this, &Mystery_Block::sprite_animation_1);
+    }
 }

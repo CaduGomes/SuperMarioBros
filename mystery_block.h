@@ -31,8 +31,16 @@ private:
 
 public slots:
 
-    void animation_start();
-    void animation_end();
+    void open_animation_start();
+    void open_animation_end();
+
+    void sprite_animation_1();
+
+    void sprite_animation_2();
+
+    void sprite_animation_3();
+
+    void sprite_animation_4();
 
 };
 
