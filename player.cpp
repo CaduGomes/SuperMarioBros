@@ -82,8 +82,6 @@ void Player::movePlayer()
   if (isFalling)
     setPos(x(), y() + 1);
 
-  qDebug() << velY;
-
   setPos(x() + velX, y() + (y() > -1 * maxJumpHeight ? velY : 0));
 }
 
@@ -104,6 +102,7 @@ void Player::gravity()
       isFalling = true;
     }
   }
+}
 
   void Player::colliding_block()
   {
