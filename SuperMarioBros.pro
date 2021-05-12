@@ -12,6 +12,7 @@ SOURCES += \
     background_image.cpp \
     brick_block.cpp \
     coin_object.cpp \
+    flag_object.cpp \
     floor_block.cpp \
     game.cpp \
     gamedirector.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     background_image.h \
     brick_block.h \
     coin_object.h \
+    flag_object.h \
     floor_block.h \
     game.h \
     gamedirector.h \
