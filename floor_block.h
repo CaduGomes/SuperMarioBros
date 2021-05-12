@@ -10,7 +10,7 @@
 class Floor_Block: public QObject, public QGraphicsPixmapItem
 {
 public:
-    Floor_Block(QGraphicsItem * parent = 0);
+    Floor_Block(bool terrain = true, QGraphicsItem * parent = 0);
 };
 
 #endif // FLOOR_BLOCK_H

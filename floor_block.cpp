@@ -1,7 +1,13 @@
 #include "floor_block.h"
 
-Floor_Block::Floor_Block(QGraphicsItem *parent): QGraphicsPixmapItem(parent)
+Floor_Block::Floor_Block(bool terrain , QGraphicsItem * parent): QGraphicsPixmapItem(parent)
 {
-    setPixmap(QPixmap(":/sprites/blocks/floor-block.png"));
-    setZValue(10);
+            setZValue(10);
+    if(!terrain){
+        setPixmap(QPixmap(":/sprites/blocks/floor-block.png"));
+    }else {
+        setPixmap(QPixmap(":/sprites/blocks/terrain-block.png"));
+    }
 }
+
+
