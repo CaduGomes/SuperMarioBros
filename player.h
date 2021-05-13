@@ -32,11 +32,24 @@ private:
     bool isMovingLeft = false;
     bool isJumping = false;
     bool isFalling = false;
+    bool mario_direction = false; //false = direita | true = esquerda
+    bool isAnimateToRight = false;
+    bool isAnimateToLeft = false;
 
     QGraphicsRectItem * mario_box_bottom;
     QGraphicsRectItem * mario_box_top;
     QGraphicsRectItem * mario_box_right;
     QGraphicsRectItem * mario_box_left;
+
+    QTimer *timer;
+
+private slots:
+
+    void walk_animation_1();
+    void walk_animation_2();
+    void walk_animation_3();
+    void jump_animation();
+    void stop_animation();
 };
 
 

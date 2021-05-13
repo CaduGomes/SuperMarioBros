@@ -16,6 +16,7 @@ SOURCES += \
     floor_block.cpp \
     game.cpp \
     gamedirector.cpp \
+    goomba_mob.cpp \
     main.cpp \
     mushroom_object.cpp \
     mystery_block.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     floor_block.h \
     game.h \
     gamedirector.h \
+    goomba_mob.h \
     mushroom_object.h \
     mystery_block.h \
     pipe_block.h \

@@ -2,7 +2,6 @@
     <qresource prefix="/mario">
         <file>sprites/mario/mario_andando_1.png</file>
         <file>sprites/mario/mario_andando_2.png</file>
-        <file>sprites/mario/mario_andando_3png.png</file>
         <file>sprites/mario/mario_morrendo.png</file>
         <file>sprites/mario/mario_parado.png</file>
         <file>sprites/mario/mario_pulando.png</file>
@@ -13,6 +12,7 @@
         <file>sprites/mario/mario-big_parado.png</file>
         <file>sprites/mario/mario-big_pulando.png</file>
         <file>sprites/mario/mario-big_virando-correndo.png</file>
+        <file>sprites/mario/mario_andando_3.png</file>
     </qresource>
     <qresource prefix="/">
         <file>sprites/blocks/brick_broken.png</file>
@@ -40,5 +40,10 @@
         <file>sprites/blocks/mystery-box/2.png</file>
         <file>sprites/blocks/mystery-box/3.png</file>
         <file>sprites/blocks/mystery-box/open.png</file>
+    </qresource>
+    <qresource prefix="/mobs">
+        <file alias="goomba_1">sprites/mobs/goomba_1.png</file>
+        <file alias="goomba_2">sprites/mobs/goomba_2.png</file>
+        <file alias="goomba_dead">sprites/mobs/goomba_morrendo.png</file>
     </qresource>
 </RCC>

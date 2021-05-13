@@ -4,6 +4,7 @@
 #include "pipe_block.h"
 #include "background_image.h"
 #include "flag_object.h"
+#include "goomba_mob.h"
 
 Game::Game(QWidget *parent)
 {
@@ -23,6 +24,11 @@ Game::Game(QWidget *parent)
     setFixedSize(512,464);
 
     scene->setStickyFocus(true);
+
+    Goomba_Mob *goomba1 = new Goomba_Mob();
+    goomba1->setPos(150, 250);
+
+    scene->addItem(goomba1);
 
     //Construindo os blocos na tela
     assemble_blocks();
@@ -48,7 +54,7 @@ void Game::moveScreen(double quant)
 void Game::check_mario_center_screen()
 {
 
-    if(scene->focusItem()->x() > (scene->sceneRect().center().x() - 200)){
+    if(scene->focusItem()->x() > (scene->sceneRect().center().x() - 100)){
         double distance = (scene->focusItem()->x() - scene->sceneRect().center().x()) * -1;
         moveScreen(distance);
     }

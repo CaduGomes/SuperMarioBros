@@ -42,18 +42,18 @@ void Coin_Object::increasing_y_animation()
         timer->start(10);
     }else {
         setPos(x(), y()-1-velY);
-        velY += 0.1;
+        velY += 0.5;
     }
 }
 
 void Coin_Object::decreasing_y_animation()
 {
-    if((initial_y-50) <= y()) {
+    if((initial_y-20) <= y()) {
         timer->stop();
 
         deleteLater();
     }else {
-        setPos(x(), y()+2.5);
+        setPos(x(), y()+3);
     }
 }
 
