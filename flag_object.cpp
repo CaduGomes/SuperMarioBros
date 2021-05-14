@@ -2,8 +2,6 @@
 
 Flag_Object::Flag_Object(qreal x, qreal y, QGraphicsItem *parent): QGraphicsItemGroup(parent)
 {
-
-
     body = new QGraphicsPixmapItem();
     body->setPixmap(QPixmap(":/sprites/world/flag-body.png"));
 

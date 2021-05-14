@@ -40,6 +40,9 @@
         <file>sprites/blocks/mystery-box/2.png</file>
         <file>sprites/blocks/mystery-box/3.png</file>
         <file>sprites/blocks/mystery-box/open.png</file>
+        <file>sprites/world/castle.png</file>
+        <file>sprites/blocks/brick_broken_1.png</file>
+        <file>sprites/blocks/brick_broken_2.png</file>
     </qresource>
     <qresource prefix="/mobs">
         <file alias="goomba_1">sprites/mobs/goomba_1.png</file>

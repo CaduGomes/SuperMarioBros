@@ -20,7 +20,7 @@ enum Surprise {
 class Mystery_Block: public QObject, public QGraphicsPixmapItem
 {
 public:
-    Mystery_Block( int surprise = 0, QGraphicsItem * parent = 0);
+    Mystery_Block(int surprise = 0, QGraphicsItem * parent = 0);
 
     void open_box();
 private:

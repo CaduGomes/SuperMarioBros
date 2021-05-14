@@ -156,7 +156,7 @@ void Player::colliding_block()
         // Colidindo com brick_block
         if (typeid(*colliding_item) == typeid(Brick_Block))
         {
-            static_cast<Brick_Block *>(colliding_item)->open_box();
+            static_cast<Brick_Block *>(colliding_item)->open_box(true);
             return;
         }
     }

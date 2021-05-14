@@ -12,13 +12,13 @@ void Pipe_Block::setSize(int size)
 
     switch (size) {
     case 1:
-            setPos(x(), y()-64);
+        setPos(x(), y()-64);
         break;
     case 2:
-         setPos(x(), y()-pixmap().height()+32);
+        setPos(x(), y()-pixmap().height()+32);
         break;
     case 3:
-         setPos(x(), y()-pixmap().height());
+        setPos(x(), y()-pixmap().height());
         break;
     }
 }

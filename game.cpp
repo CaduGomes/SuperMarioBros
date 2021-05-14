@@ -490,7 +490,7 @@ void Game::assemble_scenery()
         background_imgs.push_back(new Background_Image(1168 +(1536 * i),112, mid_cloud));
     }
 
-
+      background_imgs.push_back(new Background_Image(6464,floor, QPixmap(":/sprites/world/castle.png")));
     for(Background_Image *b : background_imgs){
         scene->addItem(b);
     }

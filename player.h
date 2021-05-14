@@ -28,6 +28,7 @@ private:
     float velX = 0;
     float velY = 0;
 
+    bool isBig = false;
     bool isMovingRight = false;
     bool isMovingLeft = false;
     bool isJumping = false;
