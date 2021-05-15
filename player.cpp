@@ -18,13 +18,13 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 
     mario_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
     mario_box_right = new QGraphicsRectItem(32, 1, 8, 30, this);  // Setando hitbox da direita
-    mario_box_top = new QGraphicsRectItem(1, -8, 30, 8, this);    // Setando hitbox do topo
+    mario_box_top = new QGraphicsRectItem(6, -4, 20, 4, this);    // Setando hitbox do topo
     mario_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
 
-    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
-    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
-    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
-    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    //    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    //    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
+    //    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    //    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 
     timer = new QTimer(this);
 }
@@ -170,27 +170,10 @@ void Player::colliding_block()
                 static_cast<Mystery_Block *>(colliding_item)->open_box();
             }
 
-            // Colidindo com brick_block
-            if (typeid(*colliding_item) == typeid(Brick_Block))
-            {
-                static_cast<Brick_Block *>(colliding_item)->open_box(true);
-                if (y() - (colliding_item->y() + static_cast<Brick_Block *>(colliding_item)->block->pixmap().height()) < 0)
-                {
-                    isCollidingTop = true;
-
-                    if (isMidJump)
-                        jumpCounter = jumpCounterMax;
-                }
-                else
-                {
-                    isCollidingTop = false;
-                }
-
-            }
 
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
-                    typeid(*colliding_item) == typeid(Pipe_Block) ||
-                    typeid(*colliding_item) == typeid(Floor_Block))
+                      typeid(*colliding_item) == typeid(Pipe_Block) ||
+                      typeid(*colliding_item) == typeid(Floor_Block))
             {
                 if (y() - (colliding_item->y() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().height()) < 0)
                 {
@@ -203,6 +186,21 @@ void Player::colliding_block()
                 {
                     isCollidingTop = false;
                 }
+            }else if (typeid(*colliding_item) == typeid(Brick_Block))
+            {
+                if (y() - (colliding_item->y() + 32) < 0)
+                {
+                    isCollidingTop = true;
+
+                    if (isMidJump)
+                        jumpCounter = jumpCounterMax;
+                }
+                else
+                {
+                    isCollidingTop = false;
+                }
+
+                static_cast<Brick_Block *>(colliding_item)->open_box(false);
             }
             else
             {
