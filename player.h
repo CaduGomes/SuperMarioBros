@@ -22,7 +22,7 @@ public:
 private:
     float accl = 0.01;
     float maxSpeed = 1.5;
-    float jumpCounterMax = 60;
+    float jumpCounterMax = 40;
     float jumpCounter = 0;
     float gravityMaxSpeed = 3;
     float velX = 0;
@@ -31,11 +31,15 @@ private:
     bool isBig = false;
     bool isMovingRight = false;
     bool isMovingLeft = false;
+    bool isCollidingRight = false;
+    bool isCollidingLeft = false;
+    bool isCollidingBottom = false;
+    bool isCollidingTop = false;
     bool isJumping = false;
-    bool isFalling = false;
     bool mario_direction = false; //false = direita | true = esquerda
     bool isAnimateToRight = false;
     bool isAnimateToLeft = false;
+    bool isMidJump = false;
 
     QGraphicsRectItem * mario_box_bottom;
     QGraphicsRectItem * mario_box_top;

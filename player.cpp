@@ -10,6 +10,7 @@
 #include "floor_block.h"
 #include "mystery_block.h"
 #include "brick_block.h"
+#include "pipe_block.h"
 
 Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
@@ -31,37 +32,27 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 void Player::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Left)
-    {
         isMovingLeft = true;
-    }
 
     if (event->key() == Qt::Key_Right)
-    {
         isMovingRight = true;
-    }
 
     if (event->key() == Qt::Key_Space)
-    {
         isJumping = true;
-    }
+
 }
 
 void Player::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Left)
-    {
         isMovingLeft = false;
-    }
 
     if (event->key() == Qt::Key_Right)
-    {
         isMovingRight = false;
-    }
 
     if (event->key() == Qt::Key_Space)
-    {
         isJumping = false;
-    }
+
 }
 
 void Player::movePlayer()
@@ -84,81 +75,191 @@ void Player::movePlayer()
         }
     }
 
+    if (!isMovingLeft && !isMovingRight)
+        velX *= 0.9;
+
     if (!isMovingLeft && !isMovingRight && velX > -0.005 && velX < 0.005){
         velX = 0;
-
-    }else if(!isMovingLeft && !isMovingRight){
-        velX *= 0.9;
     }
 
     if (isJumping && jumpCounter < jumpCounterMax)
     {
-        velY = -2;
+        velY = -3;
         jumpCounter++;
-        isFalling = false;
         jump_animation();
+        isMidJump = true;
     }
 
     else if (!isJumping && jumpCounter > 0)
     {
         jumpCounter = jumpCounterMax;
-        isFalling = true;
+        isMidJump = false;
         jump_animation();
     }
 
-    else
+    if (!isCollidingBottom && velY < gravityMaxSpeed)
     {
-        isFalling = true;
+        velY += 0.15;
+        if (!isMidJump)
+            jumpCounter = jumpCounterMax;
     }
 
-    if (isFalling && velY < gravityMaxSpeed){
-        velY += 0.1;
-    }
-
-
-    if(velX == 0 && !isJumping){
+    if(velX == 0 && !isJumping)
         stop_animation();
-    }
+
+    if (isCollidingLeft && velX < 0)
+        velX = 0;
+
+    if (isCollidingRight && velX > 0)
+        velX = 0;
+
+    if (isCollidingBottom && velY > 0)
+        velY = 0;
+
+    if (isCollidingTop && velY < 0)
+        velY = 0;
 
     setPos(x() + velX, y() + velY);
 
 }
 
-void Player::gravity()
+void Player::colliding_block()
 {
-    if (isFalling)
+    if (mario_box_bottom->collidingItems().size() > 0)
     {
         for (QGraphicsItem *colliding_item : mario_box_bottom->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Floor_Block))
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block))
             {
-                setPos(x(), colliding_item->y() - 32);
-                velY = 0;
-                jumpCounter = 0;
-                isFalling = false;
+                if (colliding_item->y() - (y() + 32) < 0)
+                {
+                    isCollidingBottom = true;
+                    if (colliding_item->y() != y() + 32)
+                        setPos(x(), colliding_item->y() - 32);
+
+                    if (!isJumping)
+                        jumpCounter = 0;
+                }
+                else
+                {
+                    isCollidingBottom = false;
+                }
+            }
+            else
+            {
+                isCollidingBottom = false;
             }
         }
     }
-}
-
-void Player::colliding_block()
-{
-    // Mario colidindo em cima
-    for (QGraphicsItem *colliding_item : mario_box_top->collidingItems())
+    else
     {
-        // Colidindo com mystery_block
-        if (typeid(*colliding_item) == typeid(Mystery_Block))
-        {
-            static_cast<Mystery_Block *>(colliding_item)->open_box();
-            return;
-        }
+        isCollidingBottom = false;
+    }
 
-        // Colidindo com brick_block
-        if (typeid(*colliding_item) == typeid(Brick_Block))
+    // Mario colidindo em cima
+    if (mario_box_top->collidingItems().size() > 0)
+    {
+        for (QGraphicsItem *colliding_item : mario_box_top->collidingItems())
         {
-            static_cast<Brick_Block *>(colliding_item)->open_box(true);
-            return;
+            // Colidindo com mystery_block
+            if (typeid(*colliding_item) == typeid(Mystery_Block))
+            {
+                static_cast<Mystery_Block *>(colliding_item)->open_box();
+            }
+
+            // Colidindo com brick_block
+            if (typeid(*colliding_item) == typeid(Brick_Block))
+            {
+                static_cast<Brick_Block *>(colliding_item)->open_box(true);
+            }
+
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block))
+            {
+                if (y() - (colliding_item->y() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().height()) < 0)
+                {
+                    isCollidingTop = true;
+
+                    if (isMidJump)
+                        jumpCounter = jumpCounterMax;
+                }
+                else
+                {
+                    isCollidingTop = false;
+                }
+            }
+            else
+            {
+                isCollidingTop = false;
+            }
         }
+    }
+    else
+    {
+        isCollidingTop = false;
+    }
+
+    if (mario_box_right->collidingItems().size() > 0)
+    {
+        for (QGraphicsItem *colliding_item : mario_box_right->collidingItems())
+        {
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block))
+            {
+                if (colliding_item->x() - (x() + 32) < 0)
+                {
+                    isCollidingRight = true;
+                }
+                else
+                {
+                    isCollidingRight = false;
+                }
+            }
+            else
+            {
+                isCollidingRight = false;
+            }
+        }
+    }
+    else
+    {
+        isCollidingRight = false;
+    }
+
+    if (mario_box_left->collidingItems().size() > 0)
+    {
+        for (QGraphicsItem *colliding_item : mario_box_left->collidingItems())
+        {
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block))
+            {
+                if (x() - (colliding_item->x() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().width()) < 0)
+                {
+                    isCollidingLeft = true;
+                }
+                else
+                {
+                    isCollidingLeft = false;
+                }
+            }
+            else
+            {
+                isCollidingLeft = false;
+            }
+        }
+    }
+    else
+    {
+        isCollidingLeft = false;
     }
 }
 
