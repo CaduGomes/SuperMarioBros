@@ -11,11 +11,13 @@ class Brick_Block: public QObject, public QGraphicsItemGroup
 public:
     Brick_Block(QGraphicsItem * parent = 0);
     void open_box(bool isBig);
+    QGraphicsPixmapItem * block;
+
 private:
     int surprise_selected;
     bool broken;
     bool isAnimating = false;
-    QGraphicsPixmapItem * block;
+
     QGraphicsPixmapItem * piece1;
     QGraphicsPixmapItem * piece2;
     QGraphicsPixmapItem * piece3;
@@ -26,6 +28,7 @@ private:
     float velYdeBaixo = -8;
 
     QTimer *timer;
+
 
 public slots:
     void no_break_animation_start();

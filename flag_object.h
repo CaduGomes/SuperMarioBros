@@ -16,6 +16,12 @@ private:
     qreal flag_x, flag_y;
     QGraphicsPixmapItem *flag;
     QGraphicsPixmapItem * body;
+
+
+private slots:
+    void get_flag_animation();
+    void flag_going_down_animation();
+
 };
 
 #endif // FLAG_OBJECT_H

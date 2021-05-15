@@ -174,10 +174,21 @@ void Player::colliding_block()
             if (typeid(*colliding_item) == typeid(Brick_Block))
             {
                 static_cast<Brick_Block *>(colliding_item)->open_box(true);
+                if (y() - (colliding_item->y() + static_cast<Brick_Block *>(colliding_item)->block->pixmap().height()) < 0)
+                {
+                    isCollidingTop = true;
+
+                    if (isMidJump)
+                        jumpCounter = jumpCounterMax;
+                }
+                else
+                {
+                    isCollidingTop = false;
+                }
+
             }
 
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
-                    typeid(*colliding_item) == typeid(Brick_Block) ||
                     typeid(*colliding_item) == typeid(Pipe_Block) ||
                     typeid(*colliding_item) == typeid(Floor_Block))
             {
@@ -208,8 +219,19 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_right->collidingItems())
         {
+            if (typeid(*colliding_item) == typeid(Brick_Block)){
+                if (colliding_item->x() - (x() + 32) < 0)
+                {
+                    isCollidingRight = true;
+                }
+                else
+                {
+                    isCollidingRight = false;
+                }
+            }
+
+
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
-                    typeid(*colliding_item) == typeid(Brick_Block) ||
                     typeid(*colliding_item) == typeid(Pipe_Block) ||
                     typeid(*colliding_item) == typeid(Floor_Block))
             {
@@ -237,8 +259,19 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_left->collidingItems())
         {
+
+            if (typeid(*colliding_item) == typeid(Brick_Block)){
+                if (x() - (colliding_item->x() + static_cast<Brick_Block *>(colliding_item)->block->pixmap().width()) < 0)
+                {
+                    isCollidingLeft = true;
+                }
+                else
+                {
+                    isCollidingLeft = false;
+                }
+            }
+
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
-                    typeid(*colliding_item) == typeid(Brick_Block) ||
                     typeid(*colliding_item) == typeid(Pipe_Block) ||
                     typeid(*colliding_item) == typeid(Floor_Block))
             {

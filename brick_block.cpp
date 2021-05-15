@@ -19,10 +19,10 @@ Brick_Block::Brick_Block(QGraphicsItem *parent): QGraphicsItemGroup(parent)
     piece3->setPos(0,32-piece1->pixmap().height());
     piece4->setPos(32-piece1->pixmap().width(),32-piece1->pixmap().height());
 
-    piece1->setZValue(10);
-    piece2->setZValue(10);
-    piece3->setZValue(10);
-    piece4->setZValue(10);
+    piece1->setZValue(-2);
+    piece2->setZValue(-2);
+    piece3->setZValue(-2);
+    piece4->setZValue(-2);
 
     addToGroup(block);
     addToGroup(piece1);
@@ -38,6 +38,10 @@ void Brick_Block::open_box(bool isBig)
         return;
 
     if(isBig){
+        piece1->setZValue(10);
+        piece2->setZValue(10);
+        piece3->setZValue(10);
+        piece4->setZValue(10);
         break_animation_start();
     }else {
         isAnimating = true;

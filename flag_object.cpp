@@ -13,5 +13,15 @@ Flag_Object::Flag_Object(qreal x, qreal y, QGraphicsItem *parent): QGraphicsItem
     flag->setPos(x-22,y-280);
 
     setPos(x,y-body->pixmap().height());
-        addToGroup(flag);
+    addToGroup(flag);
+}
+
+void Flag_Object::get_flag_animation()
+{
+
+}
+
+void Flag_Object::flag_going_down_animation()
+{
+
 }
