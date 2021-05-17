@@ -25,7 +25,6 @@ void GameDirector::timerEvent(QTimerEvent *event)
     player->movePlayer();
     game->check_mario_center_screen();
     player->colliding_block();
-    goomba->update();
 }
 
 Player *GameDirector::getPlayer() const

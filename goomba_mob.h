@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
+#include <QTimerEvent>
 #include <QTimer>
 
 
@@ -12,11 +13,12 @@ class Goomba_Mob: public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     Goomba_Mob(QGraphicsItem * parent = 0);
-
+    void timerEvent(QTimerEvent *event);
     void update();
     void dead_animation();
-private:
     bool dead = false;
+private:
+
     int direction = -1;
     float velY = 0;
 
@@ -27,6 +29,7 @@ private:
 private slots:
     void walk_animation_1();
     void walk_animation_2();
+    void dead_animation_end();
 
 };
 

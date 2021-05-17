@@ -32,6 +32,7 @@ private:
     bool isBig = true;
     bool win = false;
     bool stopControls = false;
+    bool stopGravity = false;
     bool isDead = false;
     bool isMovingRight = false;
     bool isMovingLeft = false;
@@ -58,6 +59,7 @@ private:
     QMediaPlayer * win_music;
     QMediaPlayer * music;
     QMediaPlayer * dead;
+    QMediaPlayer * kick;
 
 private slots:
 

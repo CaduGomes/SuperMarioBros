@@ -51,6 +51,9 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
     music->play();
 
+    kick = new QMediaPlayer(this);
+    kick->setMedia(QUrl("qrc:/sounds/sounds/kick.wav"));
+
     dead = new QMediaPlayer(this);
     dead->setMedia(QUrl("qrc:/sounds/sounds/mariodie.wav"));
 }
@@ -83,10 +86,10 @@ void Player::keyReleaseEvent(QKeyEvent *event)
 
 void Player::movePlayer()
 {
-    if(stopControls)
+    if(stopGravity)
         return;
 
-    if (isMovingLeft && !stopControls){
+    if (isMovingLeft){
         velX += ((-1 * maxSpeed) - velX) * accl;
         if(!isAnimateToLeft){
             isAnimateToLeft = true;
@@ -132,7 +135,7 @@ void Player::movePlayer()
             jumpCounter = jumpCounterMax;
     }
 
-    if(velX == 0 && !isJumping && !stopControls)
+    if(velX == 0 && !isJumping && !win)
         stop_animation();
 
     if (isCollidingLeft && velX < 0)
@@ -152,7 +155,7 @@ void Player::movePlayer()
             isAnimateToRight = false;
             isMovingRight = false;
             setZValue(-33);
-            restart_game();
+            QTimer::singleShot(3800,this, &Player::restart_game);
         }
     }
 
@@ -169,6 +172,7 @@ void Player::dying()
     if(!isDead){
         isDead = true;
         stopControls = true;
+        stopGravity = true;
         music->stop();
         mario_direction = false;
         gravityMaxSpeed = 2;
@@ -192,7 +196,7 @@ void Player::dying()
 
 void Player::colliding_block()
 {
-    if(stopControls)
+    if(stopGravity)
         return;
 
     if (mario_box_bottom->collidingItems().size() > 0)
@@ -273,7 +277,9 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
-                dying();
+                if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
+                    dying();
+                }
             }
 
             if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
@@ -311,7 +317,9 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
-                dying();
+                if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
+                    dying();
+                }
             }
 
             if (typeid(*colliding_item) == typeid(Brick_Block)){
@@ -371,9 +379,12 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_precise_bottom->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Goomba_Mob) && mod((x() + 16) - (colliding_item->x() + 16)) < 3)
+            if (typeid(*colliding_item) == typeid(Goomba_Mob) && mod((x() + 16) - (colliding_item->x() + 16)) < 40)
             {
-               static_cast<Goomba_Mob *>(colliding_item)->dead_animation();
+                if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
+                    static_cast<Goomba_Mob *>(colliding_item)->dead_animation();
+                    kick->play();
+                }
             }
         }
     }
@@ -514,6 +525,8 @@ void Player::walk_winning_animation_3()
     win_music->play();
     mario_direction = false;
     isMovingRight = true;
+
+     QTimer::singleShot(20,this, &Player::walk_winning_animation_3);
 }
 
 void Player::die_animation_up()
@@ -532,8 +545,8 @@ void Player::die_animation_up()
 
 void Player::die_animation_down()
 {
-     velY += 0.2;
-     setPos(x(), y()+(2*velY));
+    velY += 0.2;
+    setPos(x(), y()+(2*velY));
 }
 
 void Player::restart_game()
