@@ -190,9 +190,10 @@ void Player::colliding_block()
                 {
                     isCollidingTop = false;
                 }
-            }else if (typeid(*colliding_item) == typeid(Brick_Block))
+            }
+            else if (typeid(*colliding_item) == typeid(Brick_Block))
             {
-                if (y() - (colliding_item->y() + 32) < 0)
+                if (y() - (colliding_item->y() + static_cast<Brick_Block *>(colliding_item)->block->pixmap().height()) < 0)
                 {
                     isCollidingTop = true;
 
@@ -221,21 +222,10 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_right->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Brick_Block)){
-                if (colliding_item->x() - (x() + 32) < 0)
-                {
-                    isCollidingRight = true;
-                }
-                else
-                {
-                    isCollidingRight = false;
-                }
-            }
-
-
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
                     typeid(*colliding_item) == typeid(Pipe_Block) ||
-                    typeid(*colliding_item) == typeid(Floor_Block))
+                    typeid(*colliding_item) == typeid(Floor_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block))
             {
                 if (colliding_item->x() - (x() + 32) < 0)
                 {
@@ -245,7 +235,8 @@ void Player::colliding_block()
                 {
                     isCollidingRight = false;
                 }
-            }else if(typeid(*colliding_item) == typeid(Flag_Object)){
+            }
+            else if(typeid(*colliding_item) == typeid(Flag_Object)){
                 winning_animation();
                 static_cast<Flag_Object *>(colliding_item)->winning();
             }
