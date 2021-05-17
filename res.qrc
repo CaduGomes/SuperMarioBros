@@ -68,5 +68,6 @@
         <file>sounds/powerup_appears.wav</file>
         <file>sounds/warning_time.wav</file>
         <file>sounds/winning.wav</file>
+        <file>sounds/damage.wav</file>
     </qresource>
 </RCC>

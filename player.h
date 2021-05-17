@@ -31,6 +31,7 @@ private:
 
     bool isBig = true;
     bool win = false;
+    bool isTakingDamage = false;
     bool stopControls = false;
     bool stopGravity = false;
     bool isDead = false;
@@ -45,6 +46,9 @@ private:
     bool isAnimateToRight = false;
     bool isAnimateToLeft = false;
     bool isMidJump = false;
+    void damage();
+    void change_hitboxes();
+
 
     QGraphicsRectItem * mario_box_bottom;
     QGraphicsRectItem * mario_box_top;
@@ -60,6 +64,7 @@ private:
     QMediaPlayer * music;
     QMediaPlayer * dead;
     QMediaPlayer * kick;
+    QMediaPlayer * damage_music;
 
 private slots:
 
@@ -72,7 +77,8 @@ private slots:
     void walk_winning_animation();
     void walk_winning_animation_2();
     void walk_winning_animation_3();
-
+    void damage_animation();
+    void damage_animation_2();
     void die_animation_up();
     void die_animation_down();
 

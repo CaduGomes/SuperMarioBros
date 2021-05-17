@@ -22,20 +22,20 @@ extern GameDirector * gameDirector;
 Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
-
-    mario_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
-    mario_box_right = new QGraphicsRectItem(32, 1, 8, 30, this);  // Setando hitbox da direita
+    mario_box_left = new QGraphicsRectItem(-8, 1, 8, 60, this);   // Setando hitbox da esquerda
+    mario_box_right = new QGraphicsRectItem(32, 1, 8, 60, this);  // Setando hitbox da direita
     mario_box_top = new QGraphicsRectItem(1, -8, 30, 8, this);    // Setando hitbox do topo
-    mario_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
+    mario_box_bottom = new QGraphicsRectItem(1, 64, 30, 8, this); // Setando hitbox de baixo
     mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
-    mario_box_precise_bottom = new QGraphicsRectItem(7, 32, 16, 1, this);
+    mario_box_precise_bottom = new QGraphicsRectItem(7, 64, 16, 1, this);
+//    change_hitboxes();
 
-    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
-    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
-    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
-    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
-    mario_box_precise_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
-    mario_box_precise_bottom->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    //    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    //    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
+    //    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    //    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    //    mario_box_precise_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    //    mario_box_precise_bottom->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 
     timer = new QTimer(this);
     setZValue(999);
@@ -47,9 +47,14 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     win_music = new QMediaPlayer(this);
     win_music->setMedia(QUrl("qrc:/sounds/sounds/winning.wav"));
 
-    music = new QMediaPlayer(this);
-    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
-    music->play();
+    damage_music = new QMediaPlayer(this);
+    damage_music->setMedia(QUrl("qrc:/sounds/sounds/damage.wav"));
+
+
+
+//    music = new QMediaPlayer(this);
+//    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
+//    music->play();
 
     kick = new QMediaPlayer(this);
     kick->setMedia(QUrl("qrc:/sounds/sounds/kick.wav"));
@@ -135,7 +140,7 @@ void Player::movePlayer()
             jumpCounter = jumpCounterMax;
     }
 
-    if(velX == 0 && !isJumping && !win)
+    if(velX == 0 && !isJumping && !win && !isTakingDamage)
         stop_animation();
 
     if (isCollidingLeft && velX < 0)
@@ -168,7 +173,7 @@ void Player::movePlayer()
 }
 
 void Player::dying()
-{
+{    
     if(!isDead){
         isDead = true;
         stopControls = true;
@@ -207,11 +212,11 @@ void Player::colliding_block()
                  typeid(*colliding_item) == typeid(Brick_Block) ||
                  typeid(*colliding_item) == typeid(Pipe_Block) ||
                  typeid(*colliding_item) == typeid(Floor_Block))
-                    && colliding_item->y() - (y() + 32) < 0)
+                    && colliding_item->y() - (y() + pixmap().height()) < 0)
             {
                 isCollidingBottom = true;
-                if (colliding_item->y() != y() + 32)
-                    setPos(x(), colliding_item->y() - 32);
+                if (colliding_item->y() != y() + pixmap().height())
+                    setPos(x(), colliding_item->y() - pixmap().height());
 
                 if (!isJumping)
                     jumpCounter = 0;
@@ -233,7 +238,7 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
-                dying();
+                damage();
             }
 
             if (typeid(*colliding_item) == typeid(Brick_Block))
@@ -278,7 +283,7 @@ void Player::colliding_block()
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
                 if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
-                    dying();
+                    damage();
                 }
             }
 
@@ -318,7 +323,7 @@ void Player::colliding_block()
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
                 if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
-                    dying();
+                    damage();
                 }
             }
 
@@ -400,9 +405,53 @@ bool Player::getIsMovingLeft() const
     return isMovingLeft;
 }
 
+void Player::damage()
+{
+    if(isTakingDamage)
+        return;
+
+    if(isBig){
+        damage_music->play();
+        isTakingDamage = true;
+        QTimer::singleShot(0, this, &Player::damage_animation);
+        QTimer::singleShot(200, this, &Player::damage_animation);
+        QTimer::singleShot(400, this, &Player::damage_animation);
+        QTimer::singleShot(600, this, &Player::damage_animation);
+        isBig = false;
+
+        change_hitboxes();
+
+    }else {
+        dying();
+    }
+
+}
+
+void Player::change_hitboxes()
+{
+    if(isBig){
+        mario_box_left = new QGraphicsRectItem(-8, 1, 8, 60, this);   // Setando hitbox da esquerda
+        mario_box_right = new QGraphicsRectItem(32, 1, 8, 60, this);  // Setando hitbox da direita
+        mario_box_top = new QGraphicsRectItem(1, -8, 30, 8, this);    // Setando hitbox do topo
+        mario_box_bottom = new QGraphicsRectItem(1, 64, 30, 8, this); // Setando hitbox de baixo
+        mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
+        mario_box_precise_bottom = new QGraphicsRectItem(7, 64, 16, 1, this);
+    }else {
+        mario_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
+        mario_box_right = new QGraphicsRectItem(32, 1, 8, 30, this);  // Setando hitbox da direita
+        mario_box_top = new QGraphicsRectItem(1, -8, 30, 8, this);    // Setando hitbox do topo
+        mario_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
+        mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
+        mario_box_precise_bottom = new QGraphicsRectItem(7, 32, 16, 1, this);
+    }
+}
+
 void Player::walk_animation_1()
 {
     QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_andando_1.png");
+
+    if(isBig)
+        pixmap = QPixmap(":/mario/sprites/mario/mario-big_andando_1.png");
 
     if(!isAnimateToLeft && !isAnimateToRight)
         return;
@@ -433,6 +482,9 @@ void Player::walk_animation_2()
 
     QPixmap pixmap = QPixmap(":/mario/sprites/mario/mario_andando_2.png");
 
+    if(isBig)
+        pixmap = QPixmap(":/mario/sprites/mario/mario-big_andando_2.png");
+
     if(isAnimateToLeft){
         setPixmap(pixmap.transformed(QTransform().scale(-1, 1)));
         QTimer::singleShot(100, this, &Player::walk_animation_3);
@@ -451,6 +503,9 @@ void Player::walk_animation_3()
 
     QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_andando_3.png");
 
+    if(isBig)
+        pixmap = QPixmap(":/mario/sprites/mario/mario-big_andando_3.png");
+
     if(isAnimateToLeft){
         setPixmap(pixmap.transformed(QTransform().scale(-1, 1)));
     }
@@ -466,6 +521,10 @@ void Player::walk_animation_3()
 void Player::jump_animation()
 {
     QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_pulando.png");
+
+    if(isBig)
+        pixmap = QPixmap(":/mario/sprites/mario/mario-big_pulando.png");
+
     jump->play();
     if(mario_direction){
         setPixmap(pixmap.transformed(QTransform().scale(-1, 1)));
@@ -477,6 +536,9 @@ void Player::jump_animation()
 void Player::stop_animation()
 {
     QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_parado.png");
+
+    if(isBig)
+        pixmap = QPixmap(":/mario/sprites/mario/mario-big_parado.png");
 
     if(mario_direction){
         setPixmap(pixmap.transformed(QTransform().scale(-1, 1)));
@@ -499,7 +561,14 @@ void Player::winning_animation()
     isJumping = false;
     isMidJump = false;
     setPos(6312, y());
-    setPixmap(QPixmap(":/mario/sprites/mario/mario_deslizando_1.png"));
+
+    if(isBig){
+        setPixmap(QPixmap(":/mario/sprites/mario/mario-big_deslizando_1.png"));
+    }else {
+        setPixmap(QPixmap(":/mario/sprites/mario/mario_deslizando_1.png"));
+    }
+
+
 
     QTimer::singleShot(2000,this, &Player::walk_winning_animation);
 
@@ -509,13 +578,24 @@ void Player::walk_winning_animation()
 {
     setPos(x()+23, y());
     gravityMaxSpeed = 3;
-    setPixmap(QPixmap(":/mario/sprites/mario/mario_deslizando_2.png").transformed(QTransform().scale(-1, 1)));
+
+    if(isBig){
+        setPixmap(QPixmap(":/mario/sprites/mario/mario-big_deslizando_2.png").transformed(QTransform().scale(-1, 1)));
+    }else {
+        setPixmap(QPixmap(":/mario/sprites/mario/mario_deslizando_2.png").transformed(QTransform().scale(-1, 1)));
+    }
+
     QTimer::singleShot(100,this, &Player::walk_winning_animation_2);
 }
 
 void Player::walk_winning_animation_2()
 {
-    setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png").transformed(QTransform().scale(-1, 1)));
+    if(isBig){
+        setPixmap(QPixmap(":/mario/sprites/mario/mario-big_parado.png").transformed(QTransform().scale(-1, 1)));
+    }else {
+        setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png").transformed(QTransform().scale(-1, 1)));
+    }
+
     QTimer::singleShot(20,this, &Player::walk_winning_animation_3);
 }
 
@@ -526,7 +606,7 @@ void Player::walk_winning_animation_3()
     mario_direction = false;
     isMovingRight = true;
 
-     QTimer::singleShot(20,this, &Player::walk_winning_animation_3);
+    QTimer::singleShot(20,this, &Player::walk_winning_animation_3);
 }
 
 void Player::die_animation_up()
@@ -535,7 +615,8 @@ void Player::die_animation_up()
         timer->stop();
         velY = 0.2;
         timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, &Player::die_animation_down);
+        QPixmap pix = pixmap().transformed(QTransform().scale(1, 1));
+        connect(timer, &QTimer::timeout, this, &Player::damage_animation);
         timer->start(20);
     }
 
@@ -552,4 +633,18 @@ void Player::die_animation_down()
 void Player::restart_game()
 {
     gameDirector->game_restart();
+}
+
+void Player::damage_animation(){
+   QPixmap a = pixmap();
+   a.fill(Qt::transparent);
+
+   setPixmap(a);
+
+   QTimer::singleShot(50, this, &Player::damage_animation_2);
+}
+
+void Player::damage_animation_2()
+{
+   setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
 }
