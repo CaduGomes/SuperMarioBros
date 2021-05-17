@@ -5,6 +5,7 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QDebug>
+#include <QMediaPlayer>
 
 class Mushroom_Object: public QObject, public QGraphicsPixmapItem
 {
@@ -21,6 +22,8 @@ private:
     QTimer * timer;
 
     bool direction = true; // true = direita || false = esquerda
+
+    QMediaPlayer * appears;
 };
 
 #endif // MUSHROOM_OBJECT_H

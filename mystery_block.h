@@ -29,6 +29,8 @@ private:
 
     Mushroom_Object * mushroom_object;
 
+    QMediaPlayer * bump;
+
 public slots:
 
     void open_animation_start();

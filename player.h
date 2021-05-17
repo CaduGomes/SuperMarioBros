@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
+#include <QMediaPlayer>
 
 class Player: public QObject, public QGraphicsPixmapItem
 {
@@ -28,7 +29,7 @@ private:
     float velX = 0;
     float velY = 0;
 
-    bool isBig = false;
+    bool isBig = true;
     bool isMovingRight = false;
     bool isMovingLeft = false;
     bool isCollidingRight = false;
@@ -48,6 +49,8 @@ private:
 
     QTimer *timer;
 
+    QMediaPlayer * jump;
+
 private slots:
 
     void walk_animation_1();
@@ -55,6 +58,9 @@ private slots:
     void walk_animation_3();
     void jump_animation();
     void stop_animation();
+    void winning_animation();
+    void slide_winning_animation();
+    void walk_winning_animation();
 };
 
 

@@ -49,4 +49,20 @@
         <file alias="goomba_2">sprites/mobs/goomba_2.png</file>
         <file alias="goomba_dead">sprites/mobs/goomba_morrendo.png</file>
     </qresource>
+    <qresource prefix="/sounds">
+        <file>sounds/breakblock.wav</file>
+        <file>sounds/bump.wav</file>
+        <file>sounds/coin.wav</file>
+        <file>sounds/down_flagpole.wav</file>
+        <file>sounds/gameover.wav</file>
+        <file>sounds/get_powerup.wav</file>
+        <file>sounds/jump-small.wav</file>
+        <file>sounds/jump-super.wav</file>
+        <file>sounds/kick.wav</file>
+        <file>sounds/main-theme.mp3</file>
+        <file>sounds/mariodie.wav</file>
+        <file>sounds/powerup_appears.wav</file>
+        <file>sounds/warning_time.wav</file>
+        <file>sounds/winning.wav</file>
+    </qresource>
 </RCC>

@@ -11,6 +11,7 @@
 #include "mystery_block.h"
 #include "brick_block.h"
 #include "pipe_block.h"
+#include "flag_object.h"
 
 Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
@@ -27,6 +28,10 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     //    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 
     timer = new QTimer(this);
+
+    jump = new QMediaPlayer(this);
+    jump->setMedia(QUrl("qrc:/sounds/sounds/jump-small.wav"));
+
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
@@ -94,7 +99,6 @@ void Player::movePlayer()
     {
         jumpCounter = jumpCounterMax;
         isMidJump = false;
-        jump_animation();
     }
 
     if (!isCollidingBottom && velY < gravityMaxSpeed)
@@ -200,7 +204,7 @@ void Player::colliding_block()
                     isCollidingTop = false;
                 }
 
-                static_cast<Brick_Block *>(colliding_item)->open_box(false);
+                static_cast<Brick_Block *>(colliding_item)->open_box(isBig);
             }
             else
             {
@@ -241,6 +245,9 @@ void Player::colliding_block()
                 {
                     isCollidingRight = false;
                 }
+            }else if(typeid(*colliding_item) == typeid(Flag_Object)){
+                winning_animation();
+                static_cast<Flag_Object *>(colliding_item)->winning();
             }
             else
             {
@@ -281,6 +288,9 @@ void Player::colliding_block()
                 {
                     isCollidingLeft = false;
                 }
+            }else if(typeid(*colliding_item) == typeid(Flag_Object)){
+                winning_animation();
+                static_cast<Flag_Object *>(colliding_item)->winning();
             }
             else
             {
@@ -361,7 +371,7 @@ void Player::walk_animation_3()
 void Player::jump_animation()
 {
     QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_pulando.png");
-
+    jump->play();
     if(mario_direction){
         setPixmap(pixmap.transformed(QTransform().scale(-1, 1)));
     }else {
@@ -378,4 +388,19 @@ void Player::stop_animation()
     }else {
         setPixmap(pixmap);
     }
+}
+
+void Player::winning_animation()
+{
+    mario_direction = false;
+}
+
+void Player::slide_winning_animation()
+{
+
+}
+
+void Player::walk_winning_animation()
+{
+
 }

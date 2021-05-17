@@ -11,13 +11,16 @@ Mushroom_Object::Mushroom_Object(qreal x, qreal y, QGraphicsItem * parent): QGra
     connect(timer, &QTimer::timeout, this, &Mushroom_Object::initial_animation);
     timer->start(100);
 
+    appears = new QMediaPlayer(this);
+    appears->setMedia(QUrl("qrc:/sounds/sounds/powerup_appears.wav"));
+    appears->play();
 }
 
 void Mushroom_Object::initial_animation()
 {
     if((initial_y-32) == y()){
         timer->stop();
-        emit start_movement();
+        start_movement();
     }else {
         setPos(x(), y()-4);
     }

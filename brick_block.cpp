@@ -30,6 +30,12 @@ Brick_Block::Brick_Block(QGraphicsItem *parent): QGraphicsItemGroup(parent)
     addToGroup(piece3);
     addToGroup(piece4);
 
+    bump = new QMediaPlayer(this);
+    bump->setMedia(QUrl("qrc:/sounds/sounds/bump.wav"));
+
+    break_block = new QMediaPlayer(this);
+    break_block->setMedia(QUrl("qrc:/sounds/sounds/breakblock.wav"));
+
 }
 
 void Brick_Block::open_box(bool isBig)
@@ -38,12 +44,14 @@ void Brick_Block::open_box(bool isBig)
         return;
 
     if(isBig){
+        break_block->play();
         piece1->setZValue(10);
         piece2->setZValue(10);
         piece3->setZValue(10);
         piece4->setZValue(10);
         break_animation_start();
     }else {
+        bump->play();
         isAnimating = true;
         no_break_animation_start();
     }

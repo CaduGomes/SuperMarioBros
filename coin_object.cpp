@@ -11,6 +11,10 @@ Coin_Object::Coin_Object(qreal x, qreal y, QGraphicsItem *parent): QGraphicsPixm
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Coin_Object::increasing_y_animation);
     timer->start(15);
+
+    coin = new QMediaPlayer(this);
+    coin->setMedia(QUrl("qrc:/sounds/sounds/coin.wav"));
+    coin->play();
 }
 
 void Coin_Object::animation_2()

@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QDebug>
+#include <QMediaPlayer>
 
 class Coin_Object: public QObject, public QGraphicsPixmapItem
 {
@@ -24,6 +25,8 @@ private:
 
     int initial_y;
     float velY = 0.8;
+
+    QMediaPlayer * coin;
 };
 
 #endif // COIN_OBJECT_H

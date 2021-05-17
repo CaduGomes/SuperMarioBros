@@ -1,4 +1,5 @@
 #include <QGraphicsTextItem>
+#include <QMediaPlayer>
 #include "game.h"
 #include <QDebug>
 #include "pipe_block.h"
@@ -33,6 +34,10 @@ Game::Game(QWidget *parent)
     //Construindo os blocos na tela
     assemble_blocks();
     assemble_scenery();
+
+    QMediaPlayer * music = new QMediaPlayer(this);
+    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
+    music->play();
 
     show();
 

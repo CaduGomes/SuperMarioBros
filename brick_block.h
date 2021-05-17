@@ -5,6 +5,7 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QDebug>
+#include <QMediaPlayer>
 
 class Brick_Block: public QObject, public QGraphicsItemGroup
 {
@@ -28,6 +29,11 @@ private:
     float velYdeBaixo = -8;
 
     QTimer *timer;
+
+    QMediaPlayer * bump;
+
+    QMediaPlayer * break_block;
+
 
 
 public slots:
