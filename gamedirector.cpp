@@ -1,12 +1,14 @@
 #include "gamedirector.h"
 #include <QDebug>
+#include <QApplication>
+#include <QProcess>
 
 GameDirector::GameDirector(Game * gameScreen, QObject *parent) : QObject(parent)
 {
     game = gameScreen;
     startTimer(1000/167);
     player = new Player();
-    player->setPos(6100, 200);
+    player->setPos(0, 300);
     // colocar o foco no jogador
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
@@ -28,4 +30,10 @@ Player *GameDirector::getPlayer() const
 void GameDirector::setPlayer(Player *value)
 {
     player = value;
+}
+
+void GameDirector::game_restart()
+{
+    qApp->quit();
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }

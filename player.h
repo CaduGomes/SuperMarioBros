@@ -16,6 +16,7 @@ public:
     void keyReleaseEvent(QKeyEvent * event);
     void movePlayer();
     void gravity();
+    void dying();
     void colliding_block();
     bool getIsMovingRight() const;
     bool getIsMovingLeft() const;
@@ -31,6 +32,7 @@ private:
 
     bool isBig = true;
     bool win = false;
+    bool isDead = false;
     bool isMovingRight = false;
     bool isMovingLeft = false;
     bool isCollidingRight = false;
@@ -53,6 +55,7 @@ private:
     QMediaPlayer * jump;
     QMediaPlayer * win_music;
     QMediaPlayer * music;
+    QMediaPlayer * dead;
 
 private slots:
 
@@ -65,7 +68,8 @@ private slots:
     void walk_winning_animation();
     void walk_winning_animation_2();
     void walk_winning_animation_3();
-    void walk_winning_animation_4();
+
+    void restart_game();
 };
 
 

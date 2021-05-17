@@ -16,6 +16,7 @@ public:
     Player *getPlayer() const;
     void setPlayer(Player *value);
 
+    void game_restart();
 private:
     Player *player;
     Game * game;

@@ -58,7 +58,6 @@ void Game::moveScreen(double quant)
 
 void Game::check_mario_center_screen()
 {
-
     if(scene->focusItem()->x() > (scene->sceneRect().center().x() - 100)){
         double distance = (scene->focusItem()->x() - scene->sceneRect().center().x()) * -1;
         moveScreen(distance);

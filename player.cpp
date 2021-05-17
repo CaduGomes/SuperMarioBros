@@ -7,11 +7,14 @@
 #include <QList>
 #include <cmath>
 #include "player.h"
+#include "gamedirector.h"
 #include "floor_block.h"
 #include "mystery_block.h"
 #include "brick_block.h"
 #include "pipe_block.h"
 #include "flag_object.h"
+
+extern GameDirector * gameDirector;
 
 Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
@@ -40,6 +43,8 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
     music->play();
 
+    dead = new QMediaPlayer(this);
+    dead->setMedia(QUrl("qrc:/sounds/sounds/mariodie.wav"));
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
@@ -134,14 +139,28 @@ void Player::movePlayer()
 
     if(win){
         if(x() > 6525){
-          isAnimateToRight = false;
-          isMovingRight = false;
-          setZValue(-33);
+            isAnimateToRight = false;
+            isMovingRight = false;
+            setZValue(-33);
         }
+    }
+
+    if(y() > 400 && !isDead){
+        dying();
     }
 
     setPos(x() + velX, y() + velY);
 
+}
+
+void Player::dying()
+{
+    if(!isDead){
+    music->stop();
+    isDead = true;
+    dead->play();
+    QTimer::singleShot(3000,this, &Player::restart_game);
+    }
 }
 
 void Player::colliding_block()
@@ -461,12 +480,8 @@ void Player::walk_winning_animation_3()
     isMovingRight = true;
 }
 
-void Player::walk_winning_animation_4()
+void Player::restart_game()
 {
-    if(!isAnimateToRight){
-        isAnimateToRight = true;
-        isAnimateToLeft = false;
-        walk_animation_1();
-    }
-    //    setPos(x()+2, y());
+    gameDirector->game_restart();
+    deleteLater();
 }
