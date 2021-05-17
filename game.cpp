@@ -35,16 +35,16 @@ Game::Game(QWidget *parent)
     assemble_blocks();
     assemble_scenery();
 
-    QMediaPlayer * music = new QMediaPlayer(this);
-    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
-    music->play();
-
     show();
 
 }
 
 void Game::moveScreen(double quant)
 {
+    if(scene->sceneRect().right() > 6750){
+        return;
+    }
+
     if(quant > 150){
         scene->setSceneRect(scene->sceneRect().left()+2, 0, 512,464);
     }else if (quant > 80){

@@ -30,6 +30,7 @@ private:
     float velY = 0;
 
     bool isBig = true;
+    bool win = false;
     bool isMovingRight = false;
     bool isMovingLeft = false;
     bool isCollidingRight = false;
@@ -50,6 +51,8 @@ private:
     QTimer *timer;
 
     QMediaPlayer * jump;
+    QMediaPlayer * win_music;
+    QMediaPlayer * music;
 
 private slots:
 
@@ -59,8 +62,10 @@ private slots:
     void jump_animation();
     void stop_animation();
     void winning_animation();
-    void slide_winning_animation();
     void walk_winning_animation();
+    void walk_winning_animation_2();
+    void walk_winning_animation_3();
+    void walk_winning_animation_4();
 };
 
 

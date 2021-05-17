@@ -22,47 +22,56 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     mario_box_top = new QGraphicsRectItem(6, -4, 20, 4, this);    // Setando hitbox do topo
     mario_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
 
-    //    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
-    //    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
-    //    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
-    //    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
+    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 
     timer = new QTimer(this);
 
     jump = new QMediaPlayer(this);
     jump->setMedia(QUrl("qrc:/sounds/sounds/jump-small.wav"));
 
+
+    win_music = new QMediaPlayer(this);
+    win_music->setMedia(QUrl("qrc:/sounds/sounds/winning.wav"));
+
+    music = new QMediaPlayer(this);
+    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
+    music->play();
+
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Left)
+    if (event->key() == Qt::Key_Left && !win)
         isMovingLeft = true;
 
-    if (event->key() == Qt::Key_Right)
+    if (event->key() == Qt::Key_Right && !win)
         isMovingRight = true;
 
-    if (event->key() == Qt::Key_Space)
+    if (event->key() == Qt::Key_Space && !win)
         isJumping = true;
 
 }
 
 void Player::keyReleaseEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Left)
+    if (event->key() == Qt::Key_Left && !win)
         isMovingLeft = false;
 
-    if (event->key() == Qt::Key_Right)
+    if (event->key() == Qt::Key_Right && !win)
         isMovingRight = false;
 
-    if (event->key() == Qt::Key_Space)
+    if (event->key() == Qt::Key_Space && !win)
         isJumping = false;
 
 }
 
 void Player::movePlayer()
 {
-    if (isMovingLeft){
+
+    if (isMovingLeft && !win){
         velX += ((-1 * maxSpeed) - velX) * accl;
         if(!isAnimateToLeft){
             isAnimateToLeft = true;
@@ -108,7 +117,7 @@ void Player::movePlayer()
             jumpCounter = jumpCounterMax;
     }
 
-    if(velX == 0 && !isJumping)
+    if(velX == 0 && !isJumping && !win)
         stop_animation();
 
     if (isCollidingLeft && velX < 0)
@@ -122,6 +131,14 @@ void Player::movePlayer()
 
     if (isCollidingTop && velY < 0)
         velY = 0;
+
+    if(win){
+        if(x() > 6525){
+          isAnimateToRight = false;
+          isMovingRight = false;
+          setZValue(-33);
+        }
+    }
 
     setPos(x() + velX, y() + velY);
 
@@ -163,7 +180,6 @@ void Player::colliding_block()
         isCollidingBottom = false;
     }
 
-    // Mario colidindo em cima
     if (mario_box_top->collidingItems().size() > 0)
     {
         for (QGraphicsItem *colliding_item : mario_box_top->collidingItems())
@@ -176,8 +192,8 @@ void Player::colliding_block()
 
 
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
-                      typeid(*colliding_item) == typeid(Pipe_Block) ||
-                      typeid(*colliding_item) == typeid(Floor_Block))
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block))
             {
                 if (y() - (colliding_item->y() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().height()) < 0)
                 {
@@ -237,8 +253,16 @@ void Player::colliding_block()
                 }
             }
             else if(typeid(*colliding_item) == typeid(Flag_Object)){
-                winning_animation();
-                static_cast<Flag_Object *>(colliding_item)->winning();
+                for(QGraphicsItem *flag_item : static_cast<Flag_Object *>(colliding_item)->body->collidingItems()){
+                    if( typeid(*flag_item) == typeid(Player)){
+                        if(!win){
+                            winning_animation();
+                            static_cast<Flag_Object *>(colliding_item)->winning();
+                        }
+                    }
+                }
+
+
             }
             else
             {
@@ -280,8 +304,14 @@ void Player::colliding_block()
                     isCollidingLeft = false;
                 }
             }else if(typeid(*colliding_item) == typeid(Flag_Object)){
-                winning_animation();
-                static_cast<Flag_Object *>(colliding_item)->winning();
+                for(QGraphicsItem *flag_item : static_cast<Flag_Object *>(colliding_item)->body->collidingItems()){
+                    if( typeid(*flag_item) == typeid(Player)){
+                        if(!win){
+                            winning_animation();
+                            static_cast<Flag_Object *>(colliding_item)->winning();
+                        }
+                    }
+                }
             }
             else
             {
@@ -309,6 +339,9 @@ void Player::walk_animation_1()
 {
     QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_andando_1.png");
 
+    if(!isAnimateToLeft && !isAnimateToRight)
+        return;
+
     if(isJumping){
         isAnimateToLeft = false;
         isAnimateToRight = false;
@@ -330,6 +363,9 @@ void Player::walk_animation_1()
 
 void Player::walk_animation_2()
 {
+    if(!isAnimateToLeft && !isAnimateToRight)
+        return;
+
     QPixmap pixmap = QPixmap(":/mario/sprites/mario/mario_andando_2.png");
 
     if(isAnimateToLeft){
@@ -345,6 +381,9 @@ void Player::walk_animation_2()
 
 void Player::walk_animation_3()
 {
+    if(!isAnimateToLeft && !isAnimateToRight)
+        return;
+
     QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_andando_3.png");
 
     if(isAnimateToLeft){
@@ -383,15 +422,51 @@ void Player::stop_animation()
 
 void Player::winning_animation()
 {
+    music->stop();
     mario_direction = false;
-}
+    win = true;
+    gravityMaxSpeed = 0.4;
+    isMovingLeft = false;
+    isMovingRight = false;
+    isAnimateToLeft = false;
+    isAnimateToRight = false;
+    isJumping = false;
+    isMidJump = false;
+    setPos(6312, y());
+    setPixmap(QPixmap(":/mario/sprites/mario/mario_deslizando_1.png"));
 
-void Player::slide_winning_animation()
-{
+    QTimer::singleShot(2000,this, &Player::walk_winning_animation);
 
 }
 
 void Player::walk_winning_animation()
 {
+    setPos(x()+23, y());
+    gravityMaxSpeed = 3;
+    setPixmap(QPixmap(":/mario/sprites/mario/mario_deslizando_2.png").transformed(QTransform().scale(-1, 1)));
+    QTimer::singleShot(100,this, &Player::walk_winning_animation_2);
+}
 
+void Player::walk_winning_animation_2()
+{
+    setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png").transformed(QTransform().scale(-1, 1)));
+    QTimer::singleShot(20,this, &Player::walk_winning_animation_3);
+}
+
+void Player::walk_winning_animation_3()
+{
+    maxSpeed = 0.5;
+    win_music->play();
+    mario_direction = false;
+    isMovingRight = true;
+}
+
+void Player::walk_winning_animation_4()
+{
+    if(!isAnimateToRight){
+        isAnimateToRight = true;
+        isAnimateToLeft = false;
+        walk_animation_1();
+    }
+    //    setPos(x()+2, y());
 }

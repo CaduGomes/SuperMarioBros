@@ -13,6 +13,10 @@
         <file>sprites/mario/mario-big_pulando.png</file>
         <file>sprites/mario/mario-big_virando-correndo.png</file>
         <file>sprites/mario/mario_andando_3.png</file>
+        <file>sprites/mario/mario_deslizando_1.png</file>
+        <file>sprites/mario/mario_deslizando_2.png</file>
+        <file>sprites/mario/mario-big_deslizando_1.png</file>
+        <file>sprites/mario/mario-big_deslizando_2.png</file>
     </qresource>
     <qresource prefix="/">
         <file>sprites/blocks/brick_broken.png</file>

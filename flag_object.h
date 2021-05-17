@@ -16,10 +16,11 @@ public:
 
     void winning();
 
+    QGraphicsPixmapItem * flag;
+    QGraphicsPixmapItem * body;
 private:
     qreal flag_x, flag_y;
-    QGraphicsPixmapItem *flag;
-    QGraphicsPixmapItem * body;
+
 
     QTimer *timer;
 
