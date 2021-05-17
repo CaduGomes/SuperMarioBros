@@ -31,6 +31,7 @@ private:
 
     bool isBig = true;
     bool win = false;
+    bool stopControls = false;
     bool isDead = false;
     bool isMovingRight = false;
     bool isMovingLeft = false;
@@ -69,6 +70,9 @@ private slots:
     void walk_winning_animation();
     void walk_winning_animation_2();
     void walk_winning_animation_3();
+
+    void die_animation_up();
+    void die_animation_down();
 
     void restart_game();
 };

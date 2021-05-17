@@ -14,7 +14,7 @@ public:
     Goomba_Mob(QGraphicsItem * parent = 0);
 
     void update();
-
+    void dead_animation();
 private:
     bool dead = false;
     int direction = -1;
@@ -27,6 +27,7 @@ private:
 private slots:
     void walk_animation_1();
     void walk_animation_2();
+
 };
 
 #endif // GOOMBA_MOB_H

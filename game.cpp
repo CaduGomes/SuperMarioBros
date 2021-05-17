@@ -14,7 +14,7 @@ Game::Game(QWidget *parent)
 
     // fixar o tamanho em 800x600, que é infinito por definição
     scene->setSceneRect(0,0,512,464);
-    QPixmap m("/home/MALEK/QT-Creator/PROJECTs/soso/bomb.jpeg");
+
     scene->setBackgroundBrush(QBrush("#5C94FC"));
     // visualizar o objeto scene (cenario)
     setScene(scene);

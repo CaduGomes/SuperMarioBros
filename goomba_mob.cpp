@@ -96,3 +96,8 @@ void Goomba_Mob::walk_animation_2()
         QTimer::singleShot(150, this, &Goomba_Mob::walk_animation_1);
     }
 };
+
+void Goomba_Mob::dead_animation(){
+        dead = true;
+     setPixmap(QPixmap(":/mobs/goomba_dead"));
+}

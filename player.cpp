@@ -38,6 +38,7 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     mario_box_precise_bottom->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 
     timer = new QTimer(this);
+    setZValue(999);
 
     jump = new QMediaPlayer(this);
     jump->setMedia(QUrl("qrc:/sounds/sounds/jump-small.wav"));
@@ -56,34 +57,36 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 
 void Player::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Left && !win)
+    if (event->key() == Qt::Key_Left && !stopControls)
         isMovingLeft = true;
 
-    if (event->key() == Qt::Key_Right && !win)
+    if (event->key() == Qt::Key_Right && !stopControls)
         isMovingRight = true;
 
-    if (event->key() == Qt::Key_Space && !win)
+    if (event->key() == Qt::Key_Space && !stopControls)
         isJumping = true;
 
 }
 
 void Player::keyReleaseEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Left && !win)
+    if (event->key() == Qt::Key_Left && !stopControls)
         isMovingLeft = false;
 
-    if (event->key() == Qt::Key_Right && !win)
+    if (event->key() == Qt::Key_Right && !stopControls)
         isMovingRight = false;
 
-    if (event->key() == Qt::Key_Space && !win)
+    if (event->key() == Qt::Key_Space && !stopControls)
         isJumping = false;
 
 }
 
 void Player::movePlayer()
 {
+    if(stopControls)
+        return;
 
-    if (isMovingLeft && !win){
+    if (isMovingLeft && !stopControls){
         velX += ((-1 * maxSpeed) - velX) * accl;
         if(!isAnimateToLeft){
             isAnimateToLeft = true;
@@ -129,7 +132,7 @@ void Player::movePlayer()
             jumpCounter = jumpCounterMax;
     }
 
-    if(velX == 0 && !isJumping && !win)
+    if(velX == 0 && !isJumping && !stopControls)
         stop_animation();
 
     if (isCollidingLeft && velX < 0)
@@ -149,10 +152,11 @@ void Player::movePlayer()
             isAnimateToRight = false;
             isMovingRight = false;
             setZValue(-33);
+            restart_game();
         }
     }
 
-    if(y() > 400 && !isDead){
+    if(y() > 450 && !isDead){
         dying();
     }
 
@@ -163,15 +167,34 @@ void Player::movePlayer()
 void Player::dying()
 {
     if(!isDead){
-        music->stop();
         isDead = true;
+        stopControls = true;
+        music->stop();
+        mario_direction = false;
+        gravityMaxSpeed = 2;
+        isMovingLeft = false;
+        isMovingRight = false;
+        isAnimateToLeft = false;
+        isAnimateToRight = false;
+        isJumping = false;
+        isMidJump = false;
+        setPixmap(QPixmap(":/mario/sprites/mario/mario_morrendo.png"));
+
         dead->play();
-        QTimer::singleShot(3000,this, &Player::restart_game);
+        velY = 0.5;
+        timer = new QTimer(this)    ;
+        connect(timer, &QTimer::timeout, this, &Player::die_animation_up);
+        timer->start(20);
+
+        QTimer::singleShot(4000,this, &Player::restart_game);
     }
 }
 
 void Player::colliding_block()
 {
+    if(stopControls)
+        return;
+
     if (mario_box_bottom->collidingItems().size() > 0)
     {
         for (QGraphicsItem *colliding_item : mario_box_bottom->collidingItems())
@@ -350,7 +373,7 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Goomba_Mob) && mod((x() + 16) - (colliding_item->x() + 16)) < 3)
             {
-                // TODO: Kill Goomba
+               static_cast<Goomba_Mob *>(colliding_item)->dead_animation();
             }
         }
     }
@@ -455,6 +478,7 @@ void Player::winning_animation()
 {
     music->stop();
     mario_direction = false;
+    stopControls = true;
     win = true;
     gravityMaxSpeed = 0.4;
     isMovingLeft = false;
@@ -492,8 +516,27 @@ void Player::walk_winning_animation_3()
     isMovingRight = true;
 }
 
+void Player::die_animation_up()
+{
+    if(y() < 270){
+        timer->stop();
+        velY = 0.2;
+        timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, &Player::die_animation_down);
+        timer->start(20);
+    }
+
+    velY += 0.2;
+    setPos(x(), y()-(2*velY));
+}
+
+void Player::die_animation_down()
+{
+     velY += 0.2;
+     setPos(x(), y()+(2*velY));
+}
+
 void Player::restart_game()
 {
     gameDirector->game_restart();
-    deleteLater();
 }
