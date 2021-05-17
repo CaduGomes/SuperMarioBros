@@ -11,6 +11,10 @@ Goomba_Mob::Goomba_Mob(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     collision_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
     collision_box_right = new QGraphicsRectItem(32, 1, 8, 30, this);  // Setando hitbox da direita
     collision_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
+
+    collision_box_left->setPen(Qt::NoPen);
+    collision_box_right->setPen(Qt::NoPen);
+    collision_box_bottom->setPen(Qt::NoPen);
 }
 
 void Goomba_Mob::update()

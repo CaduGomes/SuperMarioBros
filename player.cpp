@@ -1,3 +1,5 @@
+#define mod(x) ((x)>=0?(x):-(x))
+
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QObject>
@@ -32,6 +34,8 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
     mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
     mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    mario_box_precise_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    mario_box_precise_bottom->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 
     timer = new QTimer(this);
 
@@ -159,10 +163,10 @@ void Player::movePlayer()
 void Player::dying()
 {
     if(!isDead){
-    music->stop();
-    isDead = true;
-    dead->play();
-    QTimer::singleShot(3000,this, &Player::restart_game);
+        music->stop();
+        isDead = true;
+        dead->play();
+        QTimer::singleShot(3000,this, &Player::restart_game);
     }
 }
 
@@ -202,13 +206,7 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
-                // TODO: Die
-            }
-
-            // Colidindo com mystery_block
-            if (typeid(*colliding_item) == typeid(Mystery_Block))
-            {
-                static_cast<Mystery_Block *>(colliding_item)->open_box();
+                dying();
             }
 
             if (typeid(*colliding_item) == typeid(Brick_Block))
@@ -230,17 +228,10 @@ void Player::colliding_block()
                       typeid(*colliding_item) == typeid(Floor_Block)) &&
                      y() - (colliding_item->y() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().height()) < 0)
             {
-                if (y() - (colliding_item->y() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().height()) < 0)
-                {
-                    isCollidingTop = true;
+                isCollidingTop = true;
 
-                    if (isMidJump)
-                        jumpCounter = jumpCounterMax;
-                }
-                else
-                {
-                    isCollidingTop = false;
-                }
+                if (isMidJump)
+                    jumpCounter = jumpCounterMax;
             }
             else
             {
@@ -259,7 +250,7 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
-                // TODO: Die
+                dying();
             }
 
             if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
@@ -297,7 +288,7 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
-                // TODO: Die
+                dying();
             }
 
             if (typeid(*colliding_item) == typeid(Brick_Block)){
@@ -357,9 +348,9 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_precise_bottom->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Goomba_Mob))
+            if (typeid(*colliding_item) == typeid(Goomba_Mob) && mod((x() + 16) - (colliding_item->x() + 16)) < 3)
             {
-                // TODO: Kill Goomba and jump
+                // TODO: Kill Goomba
             }
         }
     }

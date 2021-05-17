@@ -15,7 +15,6 @@ public:
     void keyPressEvent(QKeyEvent * event);
     void keyReleaseEvent(QKeyEvent * event);
     void movePlayer();
-    void gravity();
     void dying();
     void colliding_block();
     bool getIsMovingRight() const;
