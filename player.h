@@ -49,6 +49,8 @@ private:
     QGraphicsRectItem * mario_box_top;
     QGraphicsRectItem * mario_box_right;
     QGraphicsRectItem * mario_box_left;
+    QGraphicsRectItem * mario_box_precise_top;
+    QGraphicsRectItem * mario_box_precise_bottom;
 
     QTimer *timer;
 

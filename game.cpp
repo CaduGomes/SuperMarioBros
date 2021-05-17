@@ -26,10 +26,10 @@ Game::Game(QWidget *parent)
 
     scene->setStickyFocus(true);
 
-    Goomba_Mob *goomba1 = new Goomba_Mob();
-    goomba1->setPos(150, 250);
+//    Goomba_Mob *goomba1 = new Goomba_Mob();
+//    goomba1->setPos(150, 250);
 
-    scene->addItem(goomba1);
+//    scene->addItem(goomba1);
 
     //Construindo os blocos na tela
     assemble_blocks();

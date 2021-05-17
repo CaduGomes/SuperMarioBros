@@ -13,6 +13,11 @@ GameDirector::GameDirector(Game * gameScreen, QObject *parent) : QObject(parent)
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     game->scene->addItem(player);
+
+    goomba = new Goomba_Mob();
+    goomba->setPos(1092, 200);
+
+    game->scene->addItem(goomba);
 }
 
 void GameDirector::timerEvent(QTimerEvent *event)
@@ -20,6 +25,7 @@ void GameDirector::timerEvent(QTimerEvent *event)
     player->movePlayer();
     game->check_mario_center_screen();
     player->colliding_block();
+    goomba->update();
 }
 
 Player *GameDirector::getPlayer() const

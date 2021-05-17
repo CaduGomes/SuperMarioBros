@@ -1,9 +1,81 @@
 #include "goomba_mob.h"
+#include "floor_block.h"
+#include "mystery_block.h"
+#include "brick_block.h"
+#include "pipe_block.h"
 
 Goomba_Mob::Goomba_Mob(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
     walk_animation_1();
+
+    collision_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
+    collision_box_right = new QGraphicsRectItem(32, 1, 8, 30, this);  // Setando hitbox da direita
+    collision_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
 }
+
+void Goomba_Mob::update()
+{
+    if (collision_box_bottom->collidingItems().size() > 0)
+    {
+        for (QGraphicsItem *colliding_item : collision_box_bottom->collidingItems())
+        {
+            if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
+                 typeid(*colliding_item) == typeid(Pipe_Block) ||
+                 typeid(*colliding_item) == typeid(Floor_Block) ||
+                 typeid(*colliding_item) == typeid(Brick_Block))
+                    && colliding_item->y() - (y() + 32) < 0)
+            {
+                velY = 0;
+                if (colliding_item->y() != y() + 32)
+                    setPos(x(), colliding_item->y() - 32);
+            }
+            else
+            {
+                velY += velY < 3 ? 0.15 : 0;
+            }
+        }
+    }
+    else
+    {
+        velY += velY < 3 ? 0.15 : 0;
+    }
+
+    if (collision_box_right->collidingItems().size() > 0)
+    {
+        for (QGraphicsItem *colliding_item : collision_box_right->collidingItems())
+        {
+            if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
+                 typeid(*colliding_item) == typeid(Pipe_Block) ||
+                 typeid(*colliding_item) == typeid(Floor_Block) ||
+                 typeid(*colliding_item) == typeid(Brick_Block))
+                    && colliding_item->x() - (x() + 32) < 0)
+            {
+                direction = -1;
+            }
+        }
+    }
+
+    if (collision_box_left->collidingItems().size() > 0)
+    {
+        for (QGraphicsItem *colliding_item : collision_box_left->collidingItems())
+        {
+            if (typeid(*colliding_item) == typeid(Brick_Block)){
+                if (x() - (colliding_item->x() + static_cast<Brick_Block *>(colliding_item)->block->pixmap().width()) < 0)
+                    direction = 1;
+            }
+            else if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
+                      typeid(*colliding_item) == typeid(Pipe_Block) ||
+                      typeid(*colliding_item) == typeid(Floor_Block))
+                     && x() - (colliding_item->x() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().width()) < 0)
+            {
+                direction = 1;
+            }
+        }
+    }
+
+    setPos(x() + (0.25 * direction), y() + velY);
+}
+
 
 void Goomba_Mob::walk_animation_1()
 {

@@ -5,6 +5,7 @@
 #include <QTimerEvent>
 #include "game.h"
 #include "player.h"
+#include "goomba_mob.h"
 
 class GameDirector : public QObject
 {
@@ -19,7 +20,8 @@ public:
     void game_restart();
 private:
     Player *player;
-    Game * game;
+    Game *game;
+    Goomba_Mob *goomba;
 
 signals:
 
