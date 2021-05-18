@@ -14,7 +14,7 @@ Mushroom_Object::Mushroom_Object(qreal x, qreal y, QGraphicsItem * parent): QGra
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Mushroom_Object::initial_animation);
     timer->start(100);
-
+    startTimer(1000/167);
     appears = new QMediaPlayer(this);
     appears->setMedia(QUrl("qrc:/sounds/sounds/powerup_appears.wav"));
     appears->play();
@@ -28,6 +28,12 @@ Mushroom_Object::Mushroom_Object(qreal x, qreal y, QGraphicsItem * parent): QGra
     collision_box_bottom->setPen(Qt::NoPen);
 }
 
+void Mushroom_Object::timerEvent(QTimerEvent *event)
+{
+    if(moviment)
+        update();
+}
+
 void Mushroom_Object::update()
 {
     if (collision_box_bottom->collidingItems().size() > 0)
@@ -35,9 +41,9 @@ void Mushroom_Object::update()
         for (QGraphicsItem *colliding_item : collision_box_bottom->collidingItems())
         {
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
-                 typeid(*colliding_item) == typeid(Pipe_Block) ||
-                 typeid(*colliding_item) == typeid(Floor_Block) ||
-                 typeid(*colliding_item) == typeid(Brick_Block))
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block))
             {
                 velY = 0;
                 if (colliding_item->y() != y() + 32)
@@ -73,23 +79,16 @@ void Mushroom_Object::update()
         for (QGraphicsItem *colliding_item : collision_box_left->collidingItems())
         {
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
-                     typeid(*colliding_item) == typeid(Pipe_Block) ||
-                     typeid(*colliding_item) == typeid(Floor_Block) ||
-                     typeid(*colliding_item) == typeid(Brick_Block))
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block))
             {
                 direction = 1;
             }
         }
     }
 
-    setPos(x() + (0.5 * direction), y() + velY);
-}
-
-void Mushroom_Object::start_movement()
-{
-    disconnect(timer, &QTimer::timeout, this, &Mushroom_Object::initial_animation);
-    connect(timer, &QTimer::timeout, this, &Mushroom_Object::update);
-    timer->start(1000/167);
+    setPos(x() + (1.5 * direction), y() + velY);
 }
 
 void Mushroom_Object::initial_animation()
@@ -97,7 +96,7 @@ void Mushroom_Object::initial_animation()
     if((initial_y - 32) == y() - 8)
     {
         timer->stop();
-        start_movement();
+        moviment = true;
     }
     else {
         setPos(x(), y()-4);

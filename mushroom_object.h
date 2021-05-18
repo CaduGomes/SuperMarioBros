@@ -10,6 +10,7 @@ class Mushroom_Object: public QObject, public QGraphicsPixmapItem
 {
 public:
     Mushroom_Object(qreal x, qreal y,QGraphicsItem * parent = 0);
+    void timerEvent(QTimerEvent *event);
 
 private slots:
     void initial_animation();
@@ -17,8 +18,7 @@ private slots:
     void update();
 
 private:
-    void start_movement();
-
+    bool moviment = false;
     int initial_y;
     QTimer * timer;
 
