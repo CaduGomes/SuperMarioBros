@@ -5,7 +5,6 @@
 #include "pipe_block.h"
 #include "background_image.h"
 #include "flag_object.h"
-#include "goomba_mob.h"
 
 Game::Game(ISubject &gLoop, QWidget *parent): gameLoop(gLoop)
 {
@@ -27,10 +26,10 @@ Game::Game(ISubject &gLoop, QWidget *parent): gameLoop(gLoop)
 
     scene->setStickyFocus(true);
 
-//    Goomba_Mob *goomba1 = new Goomba_Mob();
-//    goomba1->setPos(150, 250);
+    //    Goomba_Mob *goomba1 = new Goomba_Mob();
+    //    goomba1->setPos(150, 250);
 
-//    scene->addItem(goomba1);
+    //    scene->addItem(goomba1);
 
     //Construindo os blocos na tela
     assemble_blocks();
@@ -42,6 +41,72 @@ Game::Game(ISubject &gLoop, QWidget *parent): gameLoop(gLoop)
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     scene->addItem(player);
+
+
+    Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+    goomba->setPos(550, floor-32);
+    goombas_mobs.push_back(goomba);
+
+    Goomba_Mob *goomba1 = new Goomba_Mob(gameLoop);
+    goomba1->setPos(1690, floor-32);
+    goombas_mobs.push_back(goomba1);
+
+    Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
+    goomba2->setPos(1740, floor-32);
+    goombas_mobs.push_back(goomba2);
+
+    Goomba_Mob *goomba3 = new Goomba_Mob(gameLoop);
+    goomba3->setPos(2640, lvl2-32);
+    goombas_mobs.push_back(goomba3);
+
+    Goomba_Mob *goomba4 = new Goomba_Mob(gameLoop);
+    goomba4->setPos(2692, lvl2-32);
+    goombas_mobs.push_back(goomba4);
+
+    Goomba_Mob *goomba5 = new Goomba_Mob(gameLoop);
+    goomba5->setPos(3140, floor-32);
+    goombas_mobs.push_back(goomba5);
+
+    Goomba_Mob *goomba6 = new Goomba_Mob(gameLoop);
+    goomba6->setPos(3170, floor-32);
+    goombas_mobs.push_back(goomba6);
+
+    Goomba_Mob *goomba7 = new Goomba_Mob(gameLoop);
+    goomba7->setPos(3388, floor-32);
+    goombas_mobs.push_back(goomba7);
+
+    Goomba_Mob *goomba8 = new Goomba_Mob(gameLoop);
+    goomba8->setPos(3388, floor-32);
+    goombas_mobs.push_back(goomba8);
+
+    Goomba_Mob *goomba9 = new Goomba_Mob(gameLoop);
+    goomba9->setPos(3900, floor-32);
+    goombas_mobs.push_back(goomba9);
+
+    Goomba_Mob *goomba10 = new Goomba_Mob(gameLoop);
+    goomba10->setPos(3950, floor-32);
+    goombas_mobs.push_back(goomba10);
+
+    Goomba_Mob *goomba11 = new Goomba_Mob(gameLoop);
+    goomba11->setPos(3983, floor-32);
+    goombas_mobs.push_back(goomba11);
+
+    Goomba_Mob *goomba12 = new Goomba_Mob(gameLoop);
+    goomba12->setPos(5450, floor-32);
+    goombas_mobs.push_back(goomba12);
+
+    Goomba_Mob *goomba13 = new Goomba_Mob(gameLoop);
+    goomba13->setPos(5485, floor-32);
+    goombas_mobs.push_back(goomba13);
+
+    Goomba_Mob *goomba14 = new Goomba_Mob(gameLoop);
+    goomba14->setPos(5520, floor-32);
+    goombas_mobs.push_back(goomba14);
+
+
+    for(Goomba_Mob *g : goombas_mobs){
+        scene->addItem(g);
+    }
 
     show();
 
@@ -77,83 +142,82 @@ void Game::check_mario_center_screen()
     }
 
     if(scene->sceneRect().center().x() > 300 && !add_goomba1){
-            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(scene->sceneRect().right() + 100, floor-32);
-            scene->addItem(goomba);
-            add_goomba1 = true;
-        }
+        goombas_mobs.at(0)->movement = true;
+        add_goomba1 = true;
+    }else if (scene->sceneRect().center().x() > 1000 && add_goomba1)
+         goombas_mobs.at(0)->movement = false;
 
-        if(scene->sceneRect().center().x() > 1043 && !add_goomba2){
-            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(1690, floor-32);
-            scene->addItem(goomba);
-            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
-            goomba2->setPos(1740, floor-32);
-            scene->addItem(goomba2);
+    if(scene->sceneRect().center().x() > 1043 && !add_goomba2){
+       goombas_mobs.at(1)->movement = true;
 
-            add_goomba2 = true;
-        }
+        goombas_mobs.at(2)->movement = true;
 
-        if(scene->sceneRect().center().x() > 2056 && !add_goomba3){
-            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(2640, lvl2-32);
-            scene->addItem(goomba);
-            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
-            goomba2->setPos(2692, lvl2-32);
-            scene->addItem(goomba2);
+        add_goomba2 = true;
+    }else if (scene->sceneRect().center().x() > 2400 && add_goomba1){
+        goombas_mobs.at(1)->movement = false;
 
-            add_goomba3 = true;
-        }
+         goombas_mobs.at(2)->movement = false;
 
-        if(scene->sceneRect().center().x() > 2700 && !add_goomba4){
-            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(3140, floor-32);
-            scene->addItem(goomba);
-            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
-            goomba2->setPos(3170, floor-32);
-            scene->addItem(goomba2);
+    }
 
-            add_goomba4 = true;
-        }
+    if(scene->sceneRect().center().x() > 2056 && !add_goomba3){
+        goombas_mobs.at(3)->movement = true;
+        goombas_mobs.at(4)->movement = true;
 
-        if(scene->sceneRect().center().x() > 3040 && !add_goomba5){
-            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(3388, floor-32);
-            scene->addItem(goomba);
-            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
-            goomba2->setPos(3388, floor-32);
-            scene->addItem(goomba2);
+        add_goomba3 = true;
+    }else if (scene->sceneRect().center().x() > 3000 && add_goomba1){
+        goombas_mobs.at(3)->movement = false;
+        goombas_mobs.at(4)->movement = false;
 
-            add_goomba5 = true;
-        }
+    }
 
-        if(scene->sceneRect().center().x() > 3388 && !add_goomba6){
-            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(3900, floor-32);
-            scene->addItem(goomba);
-            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
-            goomba2->setPos(3950, floor-32);
-            scene->addItem(goomba2);
-            Goomba_Mob *goomba3 = new Goomba_Mob(gameLoop);
-            goomba3->setPos(3983, floor-32);
-            scene->addItem(goomba3);
+    if(scene->sceneRect().center().x() > 2700 && !add_goomba4){
+        goombas_mobs.at(5)->movement = true;
+        goombas_mobs.at(6)->movement = true;
 
-            add_goomba6 = true;
-        }
+        add_goomba4 = true;
+    }else if (scene->sceneRect().center().x() > 3450 && add_goomba1){
+        goombas_mobs.at(5)->movement = false;
+        goombas_mobs.at(6)->movement = false;
 
-        if(scene->sceneRect().center().x() > 4700 && !add_goomba7){
-            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(5450, floor-32);
-            scene->addItem(goomba);
-            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
-            goomba2->setPos(5485, floor-32);
-            scene->addItem(goomba2);
-            Goomba_Mob *goomba3 = new Goomba_Mob(gameLoop);
-            goomba3->setPos(5520, floor-32);
-            scene->addItem(goomba3);
+    }
 
-            add_goomba7 = true;
-        }
+    if(scene->sceneRect().center().x() > 3040 && !add_goomba5){
+        goombas_mobs.at(7)->movement = true;
+        goombas_mobs.at(8)->movement = true;
+
+        add_goomba5 = true;
+    }else if (scene->sceneRect().center().x() > 4000 && add_goomba1){
+        goombas_mobs.at(7)->movement = false;
+        goombas_mobs.at(8)->movement = false;
+
+    }
+
+    if(scene->sceneRect().center().x() > 3388 && !add_goomba6){
+        goombas_mobs.at(9)->movement = true;
+        goombas_mobs.at(10)->movement = true;
+        goombas_mobs.at(11)->movement = true;
+
+        add_goomba6 = true;
+    }else if (scene->sceneRect().center().x() > 4300 && add_goomba1){
+        goombas_mobs.at(9)->movement = false;
+        goombas_mobs.at(10)->movement = false;
+        goombas_mobs.at(11)->movement = false;
+
+    }
+
+    if(scene->sceneRect().center().x() > 4700 && !add_goomba7){
+        goombas_mobs.at(12)->movement = true;
+        goombas_mobs.at(13)->movement = true;
+        goombas_mobs.at(14)->movement = true;
+
+        add_goomba7 = true;
+    }else if (scene->sceneRect().center().x() > 6100 && add_goomba1){
+        goombas_mobs.at(12)->movement = false;
+        goombas_mobs.at(13)->movement = false;
+        goombas_mobs.at(14)->movement = false;
+
+    }
 }
 
 void Game::assemble_blocks()
@@ -479,10 +543,10 @@ void Game::assemble_blocks()
 
     //Adicionando bandeira
     {
-       Flag_Object *f = new Flag_Object(6344,floor-32);
-       scene->addItem(f);
+        Flag_Object *f = new Flag_Object(6344,floor-32);
+        scene->addItem(f);
 
-       floor_blocks.push_back(new Floor_Block(6336, floor - 32, true));
+        floor_blocks.push_back(new Floor_Block(6336, floor - 32, true));
     }
 
     //Adicionando os blocos na tela
@@ -541,7 +605,7 @@ void Game::assemble_scenery()
         background_imgs.push_back(new Background_Image(1168 +(1536 * i),112, mid_cloud));
     }
 
-      background_imgs.push_back(new Background_Image(6464,floor, QPixmap(":/sprites/world/castle.png")));
+    background_imgs.push_back(new Background_Image(6464,floor, QPixmap(":/sprites/world/castle.png")));
     for(Background_Image *b : background_imgs){
         scene->addItem(b);
     }

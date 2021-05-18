@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
-#include <QTimerEvent>
 #include <QTimer>
 #include "iobserver.h"
 #include "gamedirector.h"
@@ -19,6 +18,8 @@ public:
     void update() override;
     void dead_animation();
     bool dead = false;
+
+    bool movement = false;
 private:
     ISubject &gameLoop;
 

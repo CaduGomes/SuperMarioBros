@@ -9,7 +9,6 @@ Goomba_Mob::Goomba_Mob(ISubject &gLoop, QGraphicsItem *parent) : QGraphicsPixmap
     gameLoop.attach(this);
 
     walk_animation_1();
-    startTimer(1000/167);
     collision_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
     collision_box_right = new QGraphicsRectItem(32, 1, 8, 30, this);  // Setando hitbox da direita
     collision_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
@@ -21,6 +20,11 @@ Goomba_Mob::Goomba_Mob(ISubject &gLoop, QGraphicsItem *parent) : QGraphicsPixmap
 
 void Goomba_Mob::update()
 {
+
+    if(!movement)
+        return;
+
+
     if (collision_box_bottom->collidingItems().size() > 0)
     {
         for (QGraphicsItem *colliding_item : collision_box_bottom->collidingItems())

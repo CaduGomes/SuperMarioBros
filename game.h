@@ -6,7 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QVector>
-
+#include "goomba_mob.h"
 #include "floor_block.h"
 #include "mystery_block.h"
 #include "brick_block.h"
@@ -27,6 +27,8 @@ private:
     void assemble_blocks();
     void assemble_scenery();
     void moveScreen(double quant);
+
+    QList <Goomba_Mob *> goombas_mobs;
 
     bool add_goomba1 = false;
     bool add_goomba2 = false;
