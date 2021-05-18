@@ -29,7 +29,7 @@ private:
     float velX = 0;
     float velY = 0;
 
-    bool isBig = true;
+    bool isBig = false;
     bool win = false;
     bool isTakingDamage = false;
     bool stopControls = false;

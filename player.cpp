@@ -16,26 +16,28 @@
 #include "pipe_block.h"
 #include "goomba_mob.h"
 #include "flag_object.h"
+#include "mushroom_object.h"
 
 extern GameDirector * gameDirector;
 
 Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
-    mario_box_left = new QGraphicsRectItem(-8, 1, 8, 60, this);   // Setando hitbox da esquerda
-    mario_box_right = new QGraphicsRectItem(32, 1, 8, 60, this);  // Setando hitbox da direita
-    mario_box_top = new QGraphicsRectItem(1, -8, 30, 8, this);    // Setando hitbox do topo
-    mario_box_bottom = new QGraphicsRectItem(1, 64, 30, 8, this); // Setando hitbox de baixo
+
+    mario_box_left = new QGraphicsRectItem(-1, 1, 2, 30, this);   // Setando hitbox da esquerda
+    mario_box_right = new QGraphicsRectItem(32, 1, 2, 30, this);  // Setando hitbox da direita
+    mario_box_top = new QGraphicsRectItem(1, -1, 30, 1, this);    // Setando hitbox do topo
+    mario_box_bottom = new QGraphicsRectItem(1, 32, 30, 1, this); // Setando hitbox de baixo
     mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
     mario_box_precise_bottom = new QGraphicsRectItem(7, 64, 16, 1, this);
-//    change_hitboxes();
+        change_hitboxes();
 
-    //    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
-    //    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
-    //    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
-    //    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
-    //    mario_box_precise_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
-    //    mario_box_precise_bottom->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
+    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    mario_box_precise_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    mario_box_precise_bottom->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 
     timer = new QTimer(this);
     setZValue(999);
@@ -52,9 +54,9 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 
 
 
-//    music = new QMediaPlayer(this);
-//    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
-//    music->play();
+    //    music = new QMediaPlayer(this);
+    //    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
+    //    music->play();
 
     kick = new QMediaPlayer(this);
     kick->setMedia(QUrl("qrc:/sounds/sounds/kick.wav"));
@@ -103,7 +105,8 @@ void Player::movePlayer()
         }
     }
 
-    if (isMovingRight){
+    if (isMovingRight)
+    {
         velX += ((1 * maxSpeed) - velX) * accl;
         if(!isAnimateToRight){
             isAnimateToRight = true;
@@ -115,9 +118,8 @@ void Player::movePlayer()
     if (!isMovingLeft && !isMovingRight)
         velX *= 0.9;
 
-    if (!isMovingLeft && !isMovingRight && velX > -0.005 && velX < 0.005){
+    if (!isMovingLeft && !isMovingRight && velX > -0.005 && velX < 0.005)
         velX = 0;
-    }
 
     if (isJumping && jumpCounter < jumpCounterMax)
     {
@@ -155,7 +157,8 @@ void Player::movePlayer()
     if (isCollidingTop && velY < 0)
         velY = 0;
 
-    if(win){
+    if(win)
+    {
         if(x() > 6525){
             isAnimateToRight = false;
             isMovingRight = false;
@@ -173,7 +176,7 @@ void Player::movePlayer()
 }
 
 void Player::dying()
-{    
+{
     if(!isDead){
         isDead = true;
         stopControls = true;
@@ -208,13 +211,18 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_bottom->collidingItems())
         {
-            if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
-                 typeid(*colliding_item) == typeid(Brick_Block) ||
-                 typeid(*colliding_item) == typeid(Pipe_Block) ||
-                 typeid(*colliding_item) == typeid(Floor_Block))
-                    && colliding_item->y() - (y() + pixmap().height()) < 0)
+            if (typeid(*colliding_item) == typeid(Mushroom_Object))
+            {
+
+            }
+
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block))
             {
                 isCollidingBottom = true;
+
                 if (colliding_item->y() != y() + pixmap().height())
                     setPos(x(), colliding_item->y() - pixmap().height());
 
@@ -236,29 +244,21 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_top->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Goomba_Mob))
+            if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-                damage();
+
             }
-
-            if (typeid(*colliding_item) == typeid(Brick_Block))
+            else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
-                if (y() - (colliding_item->y() + static_cast<Brick_Block *>(colliding_item)->block->pixmap().height()) < 0)
-                {
-                    isCollidingTop = true;
-
-                    if (isMidJump)
-                        jumpCounter = jumpCounterMax;
-                }
-                else
-                {
-                    isCollidingTop = false;
+                if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
+                    damage();
                 }
             }
-            else if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
-                      typeid(*colliding_item) == typeid(Pipe_Block) ||
-                      typeid(*colliding_item) == typeid(Floor_Block)) &&
-                     y() - (colliding_item->y() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().height()) < 0)
+
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block))
             {
                 isCollidingTop = true;
 
@@ -280,18 +280,21 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_right->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Goomba_Mob))
+            if (typeid(*colliding_item) == typeid(Mushroom_Object))
+            {
+
+            }
+            else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
                 if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
                     damage();
                 }
             }
 
-            if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
-                 typeid(*colliding_item) == typeid(Pipe_Block) ||
-                 typeid(*colliding_item) == typeid(Floor_Block) ||
-                 typeid(*colliding_item) == typeid(Brick_Block)) &&
-                    colliding_item->x() - (x() + 32) < 0)
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block))
             {
                 isCollidingRight = true;
             }
@@ -320,27 +323,21 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_left->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Goomba_Mob))
+            if (typeid(*colliding_item) == typeid(Mushroom_Object))
+            {
+
+            }
+            else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
                 if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
                     damage();
                 }
             }
 
-            if (typeid(*colliding_item) == typeid(Brick_Block)){
-                if (x() - (colliding_item->x() + static_cast<Brick_Block *>(colliding_item)->block->pixmap().width()) < 0)
-                {
-                    isCollidingLeft = true;
-                }
-                else
-                {
-                    isCollidingLeft = false;
-                }
-            }
-            else if ((typeid(*colliding_item) == typeid(Mystery_Block) ||
-                      typeid(*colliding_item) == typeid(Pipe_Block) ||
-                      typeid(*colliding_item) == typeid(Floor_Block)) &&
-                     x() - (colliding_item->x() + static_cast<QGraphicsPixmapItem *>(colliding_item)->pixmap().width()) < 0)
+            if (typeid(*colliding_item) == typeid(Mystery_Block) ||
+                    typeid(*colliding_item) == typeid(Pipe_Block) ||
+                    typeid(*colliding_item) == typeid(Floor_Block) ||
+                    typeid(*colliding_item) == typeid(Brick_Block))
             {
                 isCollidingLeft = true;
             }
@@ -636,15 +633,15 @@ void Player::restart_game()
 }
 
 void Player::damage_animation(){
-   QPixmap a = pixmap();
-   a.fill(Qt::transparent);
+    QPixmap a = pixmap();
+    a.fill(Qt::transparent);
 
-   setPixmap(a);
+    setPixmap(a);
 
-   QTimer::singleShot(50, this, &Player::damage_animation_2);
+    QTimer::singleShot(50, this, &Player::damage_animation_2);
 }
 
 void Player::damage_animation_2()
 {
-   setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
+    setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
 }

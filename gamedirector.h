@@ -6,6 +6,7 @@
 #include "game.h"
 #include "player.h"
 #include "goomba_mob.h"
+#include "mushroom_object.h"
 
 class GameDirector : public QObject
 {
@@ -22,6 +23,7 @@ private:
     Player *player;
     Game *game;
     Goomba_Mob *goomba;
+    Mushroom_Object *mushr;
 
 signals:
 

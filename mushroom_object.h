@@ -4,7 +4,6 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QObject>
-#include <QDebug>
 #include <QMediaPlayer>
 
 class Mushroom_Object: public QObject, public QGraphicsPixmapItem
@@ -14,16 +13,24 @@ public:
 
 private slots:
     void initial_animation();
-    void start_movement();
-    void movement_animation();
+
+    void update();
 
 private:
+    void start_movement();
+
     int initial_y;
     QTimer * timer;
 
-    bool direction = true; // true = direita || false = esquerda
+    float velY;
+
+    float direction = 1;
 
     QMediaPlayer * appears;
+
+    QGraphicsRectItem * collision_box_right;
+    QGraphicsRectItem * collision_box_left;
+    QGraphicsRectItem * collision_box_bottom;
 };
 
 #endif // MUSHROOM_OBJECT_H
