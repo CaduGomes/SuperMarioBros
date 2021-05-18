@@ -132,7 +132,6 @@ void Player::movePlayer()
         jump_animation();
         isMidJump = true;
     }
-
     else if (!isJumping && jumpCounter > 0)
     {
         jumpCounter = jumpCounterMax;
@@ -167,7 +166,7 @@ void Player::movePlayer()
             isAnimateToRight = false;
             isMovingRight = false;
             setZValue(-33);
-            QTimer::singleShot(3500,this, &Player::restart_game);
+            QTimer::singleShot(3500, this, &Player::restart_game);
         }
     }
 
@@ -176,7 +175,6 @@ void Player::movePlayer()
     }
 
     setPos(x() + velX, y() + velY);
-
 }
 
 void Player::dying()
@@ -406,7 +404,7 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_precise_bottom->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Goomba_Mob))
+            if (typeid(*colliding_item) == typeid(Goomba_Mob) && velY > 0)
             {
                 if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
                     static_cast<Goomba_Mob *>(colliding_item)->dead_animation();

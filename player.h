@@ -21,8 +21,6 @@ public:
     void movePlayer();
     void dying();
     void colliding_block();
-    bool getIsMovingRight() const;
-    bool getIsMovingLeft() const;
 
     void update() override;
 
