@@ -1,14 +1,15 @@
 #include <QGraphicsTextItem>
 #include <QMediaPlayer>
-#include "game.h"
 #include <QDebug>
+#include "game.h"
 #include "pipe_block.h"
 #include "background_image.h"
 #include "flag_object.h"
 #include "goomba_mob.h"
 
-Game::Game(QWidget *parent)
+Game::Game(ISubject &gLoop, QWidget *parent): gameLoop(gLoop)
 {
+    gameLoop.attach(this);
     // criar scene
     scene = new QGraphicsScene();
 
@@ -35,8 +36,20 @@ Game::Game(QWidget *parent)
     assemble_blocks();
     assemble_scenery();
 
+    player = new Player(gameLoop);
+    player->setPos(0, 300);
+    // colocar o foco no jogador
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+    scene->addItem(player);
+
     show();
 
+}
+
+void Game::update()
+{
+    check_mario_center_screen();
 }
 
 void Game::moveScreen(double quant)
@@ -62,6 +75,35 @@ void Game::check_mario_center_screen()
         double distance = (scene->focusItem()->x() - scene->sceneRect().center().x()) * -1;
         moveScreen(distance);
     }
+
+    if(scene->sceneRect().center().x() > 300 && !add_goomba1){
+            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+            goomba->setPos(scene->sceneRect().right() + 100, floor-32);
+            scene->addItem(goomba);
+            add_goomba1 = true;
+        }
+
+        if(scene->sceneRect().center().x() > 1043 && !add_goomba2){
+            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+            goomba->setPos(1690, floor-32);
+            scene->addItem(goomba);
+            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
+            goomba2->setPos(1730, floor-32);
+            scene->addItem(goomba2);
+
+            add_goomba2 = true;
+        }
+
+        if(scene->sceneRect().center().x() > 2056 && !add_goomba3){
+            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+            goomba->setPos(2660, lvl2-32);
+            scene->addItem(goomba);
+            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
+            goomba2->setPos(2692, lvl2-32);
+            scene->addItem(goomba2);
+
+            add_goomba3 = true;
+        }
 }
 
 void Game::assemble_blocks()
@@ -102,19 +144,19 @@ void Game::assemble_blocks()
 
     //Primeiro conjunto de blocos
     {
-        Mystery_Block *mystery1 = new Mystery_Block(0);
+        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 0);
         mystery1->setPos(512, lvl1);
         mystery_blocks.push_back(mystery1);
 
-        Mystery_Block *mystery2 = new Mystery_Block(1);
+        Mystery_Block *mystery2 = new Mystery_Block(gameLoop, 1);
         mystery2->setPos(672, lvl1);
         mystery_blocks.push_back(mystery2);
 
-        Mystery_Block *mystery3 = new Mystery_Block(1);
+        Mystery_Block *mystery3 = new Mystery_Block(gameLoop, 1);
         mystery3->setPos(736, lvl1);
         mystery_blocks.push_back(mystery3);
 
-        Mystery_Block *mystery4 = new Mystery_Block(1);
+        Mystery_Block *mystery4 = new Mystery_Block(gameLoop, 1);
         mystery4->setPos(704, lvl2);
         mystery_blocks.push_back(mystery4);
 
@@ -133,7 +175,7 @@ void Game::assemble_blocks()
 
     //Segundo conjunto de blocos
     {
-        Mystery_Block *mystery1 = new Mystery_Block(1);
+        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 1);
         mystery1->setPos(2496, lvl1);
         mystery_blocks.push_back(mystery1);
 
@@ -151,7 +193,7 @@ void Game::assemble_blocks()
             brick_blocks.push_back(b);
         }
 
-        Mystery_Block *mystery2 = new Mystery_Block(1);
+        Mystery_Block *mystery2 = new Mystery_Block(gameLoop, 1);
         mystery2->setPos(3008, lvl2);
         mystery_blocks.push_back(mystery2);
 
@@ -174,19 +216,19 @@ void Game::assemble_blocks()
             brick_blocks.push_back(b);
         }
 
-        Mystery_Block *mystery1 = new Mystery_Block(1);
+        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 1);
         mystery1->setPos(3392, lvl1);
         mystery_blocks.push_back(mystery1);
 
-        Mystery_Block *mystery2 = new Mystery_Block(1);
+        Mystery_Block *mystery2 = new Mystery_Block(gameLoop, 1);
         mystery2->setPos(3488, lvl1);
         mystery_blocks.push_back(mystery2);
 
-        Mystery_Block *mystery3 = new Mystery_Block(1);
+        Mystery_Block *mystery3 = new Mystery_Block(gameLoop, 1);
         mystery3->setPos(3584, lvl1);
         mystery_blocks.push_back(mystery3);
 
-        Mystery_Block *mystery4 = new Mystery_Block(1);
+        Mystery_Block *mystery4 = new Mystery_Block(gameLoop, 1);
         mystery4->setPos(3488, lvl2);
         mystery_blocks.push_back(mystery4);
 
@@ -208,11 +250,11 @@ void Game::assemble_blocks()
         brick2->setPos(4096,lvl2);
         brick_blocks.push_back(brick2);
 
-        Mystery_Block *mystery1 = new Mystery_Block(1);
+        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 1);
         mystery1->setPos(4128, lvl2);
         mystery_blocks.push_back(mystery1);
 
-        Mystery_Block *mystery2 = new Mystery_Block(1);
+        Mystery_Block *mystery2 = new Mystery_Block(gameLoop, 1);
         mystery2->setPos(4160, lvl2);
         mystery_blocks.push_back(mystery2);
 
@@ -237,7 +279,7 @@ void Game::assemble_blocks()
             brick_blocks.push_back(b);
         }
 
-        Mystery_Block *mystery1 = new Mystery_Block(1);
+        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 1);
         mystery1->setPos(5440, lvl1);
         mystery_blocks.push_back(mystery1);
 

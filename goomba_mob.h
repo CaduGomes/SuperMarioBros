@@ -6,18 +6,21 @@
 #include <QGraphicsItem>
 #include <QTimerEvent>
 #include <QTimer>
+#include "iobserver.h"
+#include "gamedirector.h"
 
 
-class Goomba_Mob: public QObject, public QGraphicsPixmapItem
+class Goomba_Mob: public QObject, public QGraphicsPixmapItem, public IObserver
 {
     Q_OBJECT
 public:
-    Goomba_Mob(QGraphicsItem * parent = 0);
-    void timerEvent(QTimerEvent *event);
-    void update();
+    Goomba_Mob(ISubject &gameLoop, QGraphicsItem * parent = 0);
+
+    void update() override;
     void dead_animation();
     bool dead = false;
 private:
+    ISubject &gameLoop;
 
     int direction = -1;
     float velY = 0;

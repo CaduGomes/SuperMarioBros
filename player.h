@@ -5,22 +5,29 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
 #include <QMediaPlayer>
+#include "iobserver.h"
+#include "isubject.h"
 
-class Player: public QObject, public QGraphicsPixmapItem
+class Player: public QObject, public QGraphicsPixmapItem, public IObserver
 {
     Q_OBJECT
 public:
-    Player(QGraphicsItem * parent = 0);
+    Player(ISubject &gameLoop, QGraphicsItem * parent = 0);
 
-    void keyPressEvent(QKeyEvent * event);
-    void keyReleaseEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent * event) override;
+    void keyReleaseEvent(QKeyEvent * event) override;
+
     void movePlayer();
     void dying();
     void colliding_block();
     bool getIsMovingRight() const;
     bool getIsMovingLeft() const;
 
+    void update() override;
+
 private:
+    ISubject &gameLoop;
+
     float accl = 0.01;
     float maxSpeed = 1.5;
     float jumpCounterMax = 40;
@@ -46,10 +53,10 @@ private:
     bool isAnimateToRight = false;
     bool isAnimateToLeft = false;
     bool isMidJump = false;
+
     void damage();
     void get_powerup();
     void change_hitboxes();
-
 
     QGraphicsRectItem * mario_box_bottom;
     QGraphicsRectItem * mario_box_top;

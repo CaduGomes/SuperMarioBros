@@ -9,8 +9,8 @@ GameDirector * gameDirector;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    game = new Game();
-    gameDirector = new GameDirector(game);
+    gameDirector = new GameDirector();
+    game = new Game(*gameDirector);
     game->show();
     return a.exec();
 }

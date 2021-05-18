@@ -2,7 +2,7 @@
 
 extern Game * game;
 
-Mystery_Block::Mystery_Block(int surprise, QGraphicsItem *parent): QGraphicsPixmapItem(parent)
+Mystery_Block::Mystery_Block(ISubject &gLoop, int surprise, QGraphicsItem *parent): QGraphicsPixmapItem(parent), gameLoop(gLoop)
 {
     setPixmap(QPixmap(":/sprites/blocks/mystery-box/1.png"));
     surprise_selected = surprise;
@@ -28,7 +28,7 @@ void Mystery_Block::open_animation_start()
 
     switch (surprise_selected) {
         case mushroom:
-         game->scene->addItem(new Mushroom_Object(x(), y()));
+         game->scene->addItem(new Mushroom_Object(x(), y(), gameLoop));
         break;
 
         case coin:

@@ -5,22 +5,25 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QMediaPlayer>
+#include "iobserver.h"
+#include "isubject.h"
 
-class Mushroom_Object: public QObject, public QGraphicsPixmapItem
+class Mushroom_Object: public QObject, public QGraphicsPixmapItem, public IObserver
 {
 public:
-    Mushroom_Object(qreal x, qreal y,QGraphicsItem * parent = 0);
-    void timerEvent(QTimerEvent *event);
+    Mushroom_Object(qreal x, qreal y, ISubject &gameLoop, QGraphicsItem * parent = 0);
+
+    void update() override;
 
 private slots:
     void initial_animation();
 
-    void update();
-
 private:
-    bool moviment = false;
+    bool movement = false;
     int initial_y;
     QTimer * timer;
+
+    ISubject &gameLoop;
 
     float velY;
 

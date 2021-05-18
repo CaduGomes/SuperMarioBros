@@ -11,6 +11,8 @@
 #include "game.h"
 #include "mushroom_object.h"
 #include "coin_object.h"
+#include "iobserver.h"
+#include "isubject.h"
 
 enum Surprise {
     mushroom,
@@ -20,12 +22,15 @@ enum Surprise {
 class Mystery_Block: public QObject, public QGraphicsPixmapItem
 {
 public:
-    Mystery_Block(int surprise = 0, QGraphicsItem * parent = 0);
+    Mystery_Block(ISubject &gameLoop, int surprise = 0, QGraphicsItem * parent = 0);
 
     void open_box();
+
 private:
     int surprise_selected;
     bool broken;
+
+    ISubject &gameLoop;
 
     Mushroom_Object * mushroom_object;
 

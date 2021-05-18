@@ -4,8 +4,10 @@
 #include "brick_block.h"
 #include "pipe_block.h"
 
-Goomba_Mob::Goomba_Mob(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
+Goomba_Mob::Goomba_Mob(ISubject &gLoop, QGraphicsItem *parent) : QGraphicsPixmapItem(parent), gameLoop(gLoop)
 {
+    gameLoop.attach(this);
+
     walk_animation_1();
     startTimer(1000/167);
     collision_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
@@ -15,11 +17,6 @@ Goomba_Mob::Goomba_Mob(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     collision_box_left->setPen(Qt::NoPen);
     collision_box_right->setPen(Qt::NoPen);
     collision_box_bottom->setPen(Qt::NoPen);
-}
-
-void Goomba_Mob::timerEvent(QTimerEvent *event)
-{
-    update();
 }
 
 void Goomba_Mob::update()
@@ -82,7 +79,7 @@ void Goomba_Mob::update()
         }
     }
 
-    setPos(x() + (0.25 * direction), y() + velY);
+    setPos(x() + (0.3 * direction), y() + velY);
 }
 
 void Goomba_Mob::walk_animation_1()
@@ -108,5 +105,6 @@ void Goomba_Mob::dead_animation(){
 }
 
 void Goomba_Mob::dead_animation_end(){
+    gameLoop.detach(this);
     deleteLater();
 }

@@ -5,16 +5,19 @@
 #include "pipe_block.h"
 #include <QTimer>
 
-Mushroom_Object::Mushroom_Object(qreal x, qreal y, QGraphicsItem * parent): QGraphicsPixmapItem(parent)
+Mushroom_Object::Mushroom_Object(qreal x, qreal y, ISubject &gLoop, QGraphicsItem * parent): QGraphicsPixmapItem(parent), gameLoop(gLoop)
 {
+    gameLoop.attach(this);
+
     setPixmap(QPixmap(":/sprites/objects/power-up.png"));
     setZValue(-1);
     setPos(x, y - 12);
     initial_y = y;
+
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Mushroom_Object::initial_animation);
     timer->start(100);
-    startTimer(1000/167);
+
     appears = new QMediaPlayer(this);
     appears->setMedia(QUrl("qrc:/sounds/sounds/powerup_appears.wav"));
     appears->play();
@@ -28,14 +31,11 @@ Mushroom_Object::Mushroom_Object(qreal x, qreal y, QGraphicsItem * parent): QGra
     collision_box_bottom->setPen(Qt::NoPen);
 }
 
-void Mushroom_Object::timerEvent(QTimerEvent *event)
-{
-    if(moviment)
-        update();
-}
-
 void Mushroom_Object::update()
 {
+    if (!movement)
+        return;
+
     if (collision_box_bottom->collidingItems().size() > 0)
     {
         for (QGraphicsItem *colliding_item : collision_box_bottom->collidingItems())
@@ -88,7 +88,7 @@ void Mushroom_Object::update()
         }
     }
 
-    setPos(x() + (1.5 * direction), y() + velY);
+    setPos(x() + (0.5 * direction), y() + velY);
 }
 
 void Mushroom_Object::initial_animation()
@@ -96,7 +96,7 @@ void Mushroom_Object::initial_animation()
     if((initial_y - 32) == y() - 8)
     {
         timer->stop();
-        moviment = true;
+        movement = true;
     }
     else {
         setPos(x(), y()-4);

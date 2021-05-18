@@ -33,6 +33,8 @@ HEADERS += \
     game.h \
     gamedirector.h \
     goomba_mob.h \
+    iobserver.h \
+    isubject.h \
     mushroom_object.h \
     mystery_block.h \
     pipe_block.h \

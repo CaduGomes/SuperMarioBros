@@ -3,29 +3,21 @@
 
 #include <QObject>
 #include <QTimerEvent>
-#include "game.h"
-#include "player.h"
-#include "goomba_mob.h"
-#include "mushroom_object.h"
+#include "ISubject.h"
+#include "iobserver.h"
 
-class GameDirector : public QObject
+class GameDirector : public QObject, public ISubject
 {
     Q_OBJECT
 public:
-    explicit GameDirector(Game * gameScreen = nullptr, QObject *parent = nullptr);
+    explicit GameDirector(QObject *parent = nullptr);
     void timerEvent(QTimerEvent *event);
 
-    Player *getPlayer() const;
-    void setPlayer(Player *value);
+    void attach(IObserver *observer) override;
+    void detach(IObserver *observer) override;
 
-    void game_restart();
 private:
-    Player *player;
-    Game *game;
-    Goomba_Mob *goomba;
-    Mushroom_Object *mushr;
-
-signals:
+    QList<IObserver *> obs_list;
 
 };
 

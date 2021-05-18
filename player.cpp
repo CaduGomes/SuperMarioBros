@@ -5,9 +5,10 @@
 #include <QKeyEvent>
 #include <QDebug>
 #include <QList>
+#include <QApplication>
+#include <QProcess>
 #include <cmath>
 #include "player.h"
-#include "gamedirector.h"
 #include "floor_block.h"
 #include "mystery_block.h"
 #include "brick_block.h"
@@ -17,10 +18,10 @@
 #include "mushroom_object.h"
 #include "background_image.h"
 
-extern GameDirector * gameDirector;
-
-Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
+Player::Player(ISubject &gLoop, QGraphicsItem *parent) : QGraphicsPixmapItem(parent), gameLoop(gLoop)
 {
+    gameLoop.attach(this);
+
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
 
     mario_box_left = new QGraphicsRectItem(0, 1, 2, 30, this);   // Setando hitbox da esquerda
@@ -28,7 +29,7 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     mario_box_top = new QGraphicsRectItem(4, -1, 24, 1, this);    // Setando hitbox do topo
     mario_box_bottom = new QGraphicsRectItem(4, 32, 24, 1, this); // Setando hitbox de baixo
     mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
-    mario_box_precise_bottom = new QGraphicsRectItem(7, 34, 16, 1, this);
+    mario_box_precise_bottom = new QGraphicsRectItem(4, 38, 24, 1, this);
 
 
     mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
@@ -86,6 +87,12 @@ void Player::keyReleaseEvent(QKeyEvent *event)
 
     if (event->key() == Qt::Key_Space && !stopControls)
         isJumping = false;
+}
+
+void Player::update()
+{
+    movePlayer();
+    colliding_block();
 }
 
 void Player::movePlayer()
@@ -672,7 +679,8 @@ void Player::die_animation_down()
 
 void Player::restart_game()
 {
-    gameDirector->game_restart();
+    qApp->quit();
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }
 
 void Player::damage_animation(){
