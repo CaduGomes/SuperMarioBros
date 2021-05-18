@@ -93,14 +93,9 @@ void Game::assemble_blocks()
                 blocksWidth += 64;
             }
 
+            floor_blocks.push_back(new Floor_Block(blocksWidth, floor, false));
 
-            Floor_Block *block2 = new Floor_Block(false);
-            block2->setPos(blocksWidth,floor);
-            floor_blocks.push_back(block2);
-
-            Floor_Block *block = new Floor_Block(false);
-            block->setPos(blocksWidth,floor+32);
-            floor_blocks.push_back(block);
+            floor_blocks.push_back(new Floor_Block(blocksWidth, floor + 32, false));
             blocksWidth += 32;
         }
     }
@@ -255,57 +250,39 @@ void Game::assemble_blocks()
     {
         int x = 4288;
         for(int i=0;i < 4;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-32);
-            floor_blocks.push_back(block);
-
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 32, true));
         }
+
         x += 32;
         for(int i=0;i < 3;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-64);
-            floor_blocks.push_back(block);
-
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 64, true));
         }
+
         x += 32;
         for(int i=0;i < 2;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-96);
-            floor_blocks.push_back(block);
-
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 96, true));
         }
+
         x += 32;
-        Floor_Block *block = new Floor_Block(true);
-        block->setPos(x,floor-128);
-        floor_blocks.push_back(block);
+        floor_blocks.push_back(new Floor_Block(x, floor - 128, true));
     }
 
     //Segundo conjunto de Terrain Block
     {
         int x = 4480;
 
-        Floor_Block *block = new Floor_Block(true);
-        block->setPos(x,floor-128);
-        floor_blocks.push_back(block);
+        floor_blocks.push_back(new Floor_Block(x, floor - 128, true));
 
         for(int i=0;i < 2;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-96);
-            floor_blocks.push_back(block);
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 96, true));
         }
 
         for(int i=0;i < 3;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-64);
-            floor_blocks.push_back(block);
-
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 64, true));
         }
 
         for(int i=0;i < 4;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-32);
-            floor_blocks.push_back(block);
-
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 32, true));
         }
 
     }
@@ -314,30 +291,22 @@ void Game::assemble_blocks()
     {
         int x = 4736;
         for(int i=0;i < 5;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-32);
-            floor_blocks.push_back(block);
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 32, true));
 
         }
         x += 32;
         for(int i=0;i < 4;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-64);
-            floor_blocks.push_back(block);
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 64, true));
 
         }
         x += 32;
         for(int i=0;i < 3;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-96);
-            floor_blocks.push_back(block);
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 96, true));
 
         }
         x += 32;
         for(int i=0;i < 2;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-128);
-            floor_blocks.push_back(block);
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 128, true));
         }
     }
 
@@ -345,28 +314,18 @@ void Game::assemble_blocks()
     {
         int x = 4960;
 
-        Floor_Block *block = new Floor_Block(true);
-        block->setPos(x,floor-128);
-        floor_blocks.push_back(block);
+        floor_blocks.push_back(new Floor_Block(x, floor - 128, true));
 
         for(int i=0;i < 2;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-96);
-            floor_blocks.push_back(block);
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 96, true));
         }
 
         for(int i=0;i < 3;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-64);
-            floor_blocks.push_back(block);
-
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 64, true));
         }
 
         for(int i=0;i < 4;i++){
-            Floor_Block *block = new Floor_Block(true);
-            block->setPos(x + (i*32),floor-32);
-            floor_blocks.push_back(block);
-
+            floor_blocks.push_back(new Floor_Block(x + (i * 32), floor - 32, true));
         }
 
     }
@@ -378,9 +337,7 @@ void Game::assemble_blocks()
         int size = 9;
         for(int i=0;i < 8;i++){
             for(int k=0;k < size; k++){
-                Floor_Block *block = new Floor_Block(true);
-                block->setPos(x - (k*32),floor-floorDistance);
-                floor_blocks.push_back(block);
+                floor_blocks.push_back(new Floor_Block(x - (k * 32), floor - floorDistance, true));
             }
             floorDistance += 32;
             size--;
@@ -433,9 +390,7 @@ void Game::assemble_blocks()
        Flag_Object *f = new Flag_Object(6344,floor-32);
        scene->addItem(f);
 
-       Floor_Block *block = new Floor_Block(true);
-       block->setPos(6336, floor-32);
-       floor_blocks.push_back(block);
+       floor_blocks.push_back(new Floor_Block(6336, floor - 32, true));
     }
 
     //Adicionando os blocos na tela

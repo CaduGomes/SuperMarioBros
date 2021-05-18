@@ -8,7 +8,7 @@ GameDirector::GameDirector(Game * gameScreen, QObject *parent) : QObject(parent)
     game = gameScreen;
     startTimer(1000/167);
     player = new Player();
-    player->setPos(0, 100);
+    player->setPos(0, 300);
     // colocar o foco no jogador
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();

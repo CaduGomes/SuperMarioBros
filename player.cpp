@@ -1,5 +1,3 @@
-#define mod(x) ((x)>=0?(x):-(x))
-
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QObject>
@@ -17,6 +15,7 @@
 #include "goomba_mob.h"
 #include "flag_object.h"
 #include "mushroom_object.h"
+#include "background_image.h"
 
 extern GameDirector * gameDirector;
 
@@ -45,7 +44,6 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     jump = new QMediaPlayer(this);
     jump->setMedia(QUrl("qrc:/sounds/sounds/jump-small.wav"));
 
-
     win_music = new QMediaPlayer(this);
     win_music->setMedia(QUrl("qrc:/sounds/sounds/winning.wav"));
 
@@ -55,9 +53,9 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     powerup = new QMediaPlayer(this);
     powerup->setMedia(QUrl("qrc:/sounds/sounds/get_powerup.wav"));
 
-    //    music = new QMediaPlayer(this);
-    //    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
-    //    music->play();
+    music = new QMediaPlayer(this);
+    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
+    music->play();
 
     kick = new QMediaPlayer(this);
     kick->setMedia(QUrl("qrc:/sounds/sounds/kick.wav"));
@@ -181,7 +179,7 @@ void Player::dying()
         isDead = true;
         stopControls = true;
         stopGravity = true;
-        //        music->stop();
+        music->stop();
         mario_direction = false;
         gravityMaxSpeed = 2;
         isMovingLeft = false;
@@ -219,6 +217,12 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_bottom->collidingItems())
         {
+            if (typeid(*colliding_item) == typeid(Background_Image))
+            {
+                isCollidingBottom = false;
+                continue;
+            }
+
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
                 static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
@@ -286,10 +290,14 @@ void Player::colliding_block()
         isCollidingTop = false;
     }
 
+
     if (mario_box_right->collidingItems().size() > 0)
     {
         for (QGraphicsItem *colliding_item : mario_box_right->collidingItems())
         {
+            if (typeid(*colliding_item) == typeid(Background_Image))
+                continue;
+
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
                 static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
@@ -334,6 +342,9 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_left->collidingItems())
         {
+            if (typeid(*colliding_item) == typeid(Background_Image))
+                continue;
+
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
                 static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
@@ -393,7 +404,7 @@ void Player::colliding_block()
     {
         for (QGraphicsItem *colliding_item : mario_box_precise_bottom->collidingItems())
         {
-            if (typeid(*colliding_item) == typeid(Goomba_Mob) && mod((x() + 16) - (colliding_item->x() + 16)) < 40)
+            if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
                 if(!static_cast<Goomba_Mob *>(colliding_item)->dead){
                     static_cast<Goomba_Mob *>(colliding_item)->dead_animation();
@@ -581,7 +592,7 @@ void Player::stop_animation()
 
 void Player::winning_animation()
 {
-    //    music->stop();
+    music->stop();
     mario_direction = false;
     stopControls = true;
     win = true;
@@ -599,8 +610,6 @@ void Player::winning_animation()
     }else {
         setPixmap(QPixmap(":/mario/sprites/mario/mario_deslizando_1.png"));
     }
-
-
 
     QTimer::singleShot(2000,this, &Player::walk_winning_animation);
 
