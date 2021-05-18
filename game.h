@@ -31,6 +31,10 @@ private:
     bool add_goomba1 = false;
     bool add_goomba2 = false;
     bool add_goomba3 = false;
+    bool add_goomba4 = false;
+    bool add_goomba5 = false;
+    bool add_goomba6 = false;
+    bool add_goomba7 = false;
 
     Player *player;
     ISubject &gameLoop;

@@ -88,7 +88,7 @@ void Game::check_mario_center_screen()
             goomba->setPos(1690, floor-32);
             scene->addItem(goomba);
             Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
-            goomba2->setPos(1730, floor-32);
+            goomba2->setPos(1740, floor-32);
             scene->addItem(goomba2);
 
             add_goomba2 = true;
@@ -96,13 +96,63 @@ void Game::check_mario_center_screen()
 
         if(scene->sceneRect().center().x() > 2056 && !add_goomba3){
             Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
-            goomba->setPos(2660, lvl2-32);
+            goomba->setPos(2640, lvl2-32);
             scene->addItem(goomba);
             Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
             goomba2->setPos(2692, lvl2-32);
             scene->addItem(goomba2);
 
             add_goomba3 = true;
+        }
+
+        if(scene->sceneRect().center().x() > 2700 && !add_goomba4){
+            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+            goomba->setPos(3140, floor-32);
+            scene->addItem(goomba);
+            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
+            goomba2->setPos(3170, floor-32);
+            scene->addItem(goomba2);
+
+            add_goomba4 = true;
+        }
+
+        if(scene->sceneRect().center().x() > 3040 && !add_goomba5){
+            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+            goomba->setPos(3388, floor-32);
+            scene->addItem(goomba);
+            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
+            goomba2->setPos(3388, floor-32);
+            scene->addItem(goomba2);
+
+            add_goomba5 = true;
+        }
+
+        if(scene->sceneRect().center().x() > 3388 && !add_goomba6){
+            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+            goomba->setPos(3900, floor-32);
+            scene->addItem(goomba);
+            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
+            goomba2->setPos(3950, floor-32);
+            scene->addItem(goomba2);
+            Goomba_Mob *goomba3 = new Goomba_Mob(gameLoop);
+            goomba3->setPos(3983, floor-32);
+            scene->addItem(goomba3);
+
+            add_goomba6 = true;
+        }
+
+        if(scene->sceneRect().center().x() > 4700 && !add_goomba7){
+            Goomba_Mob *goomba = new Goomba_Mob(gameLoop);
+            goomba->setPos(5450, floor-32);
+            scene->addItem(goomba);
+            Goomba_Mob *goomba2 = new Goomba_Mob(gameLoop);
+            goomba2->setPos(5485, floor-32);
+            scene->addItem(goomba2);
+            Goomba_Mob *goomba3 = new Goomba_Mob(gameLoop);
+            goomba3->setPos(5520, floor-32);
+            scene->addItem(goomba3);
+
+            add_goomba7 = true;
         }
 }
 
@@ -144,11 +194,11 @@ void Game::assemble_blocks()
 
     //Primeiro conjunto de blocos
     {
-        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 0);
+        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 1);
         mystery1->setPos(512, lvl1);
         mystery_blocks.push_back(mystery1);
 
-        Mystery_Block *mystery2 = new Mystery_Block(gameLoop, 1);
+        Mystery_Block *mystery2 = new Mystery_Block(gameLoop, 0);
         mystery2->setPos(672, lvl1);
         mystery_blocks.push_back(mystery2);
 
@@ -175,7 +225,7 @@ void Game::assemble_blocks()
 
     //Segundo conjunto de blocos
     {
-        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 1);
+        Mystery_Block *mystery1 = new Mystery_Block(gameLoop, 0);
         mystery1->setPos(2496, lvl1);
         mystery_blocks.push_back(mystery1);
 
@@ -228,7 +278,7 @@ void Game::assemble_blocks()
         mystery3->setPos(3584, lvl1);
         mystery_blocks.push_back(mystery3);
 
-        Mystery_Block *mystery4 = new Mystery_Block(gameLoop, 1);
+        Mystery_Block *mystery4 = new Mystery_Block(gameLoop, 0);
         mystery4->setPos(3488, lvl2);
         mystery_blocks.push_back(mystery4);
 
