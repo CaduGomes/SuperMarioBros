@@ -14,6 +14,7 @@ public:
     Mushroom_Object(qreal x, qreal y, ISubject &gameLoop, QGraphicsItem * parent = 0);
 
     void update() override;
+    void detachFromSubject();
 
 private slots:
     void initial_animation();

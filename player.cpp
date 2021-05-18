@@ -15,7 +15,6 @@
 #include "pipe_block.h"
 #include "goomba_mob.h"
 #include "flag_object.h"
-#include "mushroom_object.h"
 #include "background_image.h"
 
 Player::Player(ISubject &gLoop, QGraphicsItem *parent) : QGraphicsPixmapItem(parent), gameLoop(gLoop)
@@ -29,7 +28,7 @@ Player::Player(ISubject &gLoop, QGraphicsItem *parent) : QGraphicsPixmapItem(par
     mario_box_top = new QGraphicsRectItem(4, -1, 24, 1, this);    // Setando hitbox do topo
     mario_box_bottom = new QGraphicsRectItem(4, 32, 24, 1, this); // Setando hitbox de baixo
     mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
-    mario_box_precise_bottom = new QGraphicsRectItem(4, 38, 24, 1, this);
+    mario_box_precise_bottom = new QGraphicsRectItem(2, 36, 30, 1, this);
 
 
     mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
@@ -232,8 +231,7 @@ void Player::colliding_block()
 
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
-                get_powerup();
+                get_powerup(static_cast<Mushroom_Object *>(colliding_item));
             }
 
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
@@ -266,8 +264,7 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
-                get_powerup();
+                get_powerup(static_cast<Mushroom_Object *>(colliding_item));
             }
             else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
@@ -307,8 +304,7 @@ void Player::colliding_block()
 
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
-                get_powerup();
+                get_powerup(static_cast<Mushroom_Object *>(colliding_item));
             }
             else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
@@ -354,8 +350,7 @@ void Player::colliding_block()
 
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
-                get_powerup();
+                get_powerup(static_cast<Mushroom_Object *>(colliding_item));
             }
             else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
@@ -422,16 +417,6 @@ void Player::colliding_block()
     }
 }
 
-bool Player::getIsMovingRight() const
-{
-    return isMovingRight;
-}
-
-bool Player::getIsMovingLeft() const
-{
-    return isMovingLeft;
-}
-
 void Player::damage()
 {
     if(isTakingDamage)
@@ -454,10 +439,13 @@ void Player::damage()
 
 }
 
-void Player::get_powerup()
+void Player::get_powerup(Mushroom_Object *mushr)
 {
     if(isBig)
         return;
+
+    mushr->detachFromSubject();
+    mushr->deleteLater();
 
     powerup->play();
     setPos(x(), y()-32);
@@ -478,14 +466,14 @@ void Player::change_hitboxes()
         mario_box_top = new QGraphicsRectItem(4, -1, 24, 1, this);    // Setando hitbox do topo
         mario_box_bottom = new QGraphicsRectItem(4, 64, 24, 1, this); // Setando hitbox de baixo
         mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
-        mario_box_precise_bottom = new QGraphicsRectItem(7, 64, 16, 1, this);
+        mario_box_precise_bottom = new QGraphicsRectItem(2, 68, 30, 1, this);
     }else {
         mario_box_left = new QGraphicsRectItem(0, 1, 2, 30, this);   // Setando hitbox da esquerda
         mario_box_right = new QGraphicsRectItem(30, 1, 2, 30, this);  // Setando hitbox da direita
         mario_box_top = new QGraphicsRectItem(4, -1, 24, 1, this);    // Setando hitbox do topo
         mario_box_bottom = new QGraphicsRectItem(4, 32, 24, 1, this); // Setando hitbox de baixo
         mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
-        mario_box_precise_bottom = new QGraphicsRectItem(7, 34, 16, 1, this);
+        mario_box_precise_bottom = new QGraphicsRectItem(2, 36, 30, 1, this);
     }
 
     mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
@@ -498,7 +486,7 @@ void Player::change_hitboxes()
 
 void Player::walk_animation_1()
 {
-    QPixmap pixmap =  QPixmap(":/mario/sprites/mario/mario_andando_1.png");
+    QPixmap pixmap = QPixmap(":/mario/sprites/mario/mario_andando_1.png");
 
     if(isBig)
         pixmap = QPixmap(":/mario/sprites/mario/mario-big_andando_1.png");

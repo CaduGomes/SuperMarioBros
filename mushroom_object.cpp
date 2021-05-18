@@ -31,6 +31,11 @@ Mushroom_Object::Mushroom_Object(qreal x, qreal y, ISubject &gLoop, QGraphicsIte
     collision_box_bottom->setPen(Qt::NoPen);
 }
 
+void Mushroom_Object::detachFromSubject()
+{
+    gameLoop.detach(this);
+}
+
 void Mushroom_Object::update()
 {
     if (!movement)

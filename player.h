@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include "iobserver.h"
 #include "isubject.h"
+#include "mushroom_object.h"
 
 class Player: public QObject, public QGraphicsPixmapItem, public IObserver
 {
@@ -55,7 +56,7 @@ private:
     bool isMidJump = false;
 
     void damage();
-    void get_powerup();
+    void get_powerup(Mushroom_Object *mushr);
     void change_hitboxes();
 
     QGraphicsRectItem * mario_box_bottom;
