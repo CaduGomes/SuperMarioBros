@@ -24,13 +24,13 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
 
-    mario_box_left = new QGraphicsRectItem(-1, 1, 2, 30, this);   // Setando hitbox da esquerda
-    mario_box_right = new QGraphicsRectItem(32, 1, 2, 30, this);  // Setando hitbox da direita
-    mario_box_top = new QGraphicsRectItem(1, -1, 30, 1, this);    // Setando hitbox do topo
-    mario_box_bottom = new QGraphicsRectItem(1, 32, 30, 1, this); // Setando hitbox de baixo
+    mario_box_left = new QGraphicsRectItem(0, 1, 2, 30, this);   // Setando hitbox da esquerda
+    mario_box_right = new QGraphicsRectItem(30, 1, 2, 30, this);  // Setando hitbox da direita
+    mario_box_top = new QGraphicsRectItem(4, -1, 24, 1, this);    // Setando hitbox do topo
+    mario_box_bottom = new QGraphicsRectItem(4, 32, 24, 1, this); // Setando hitbox de baixo
     mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
-    mario_box_precise_bottom = new QGraphicsRectItem(7, 64, 16, 1, this);
-        change_hitboxes();
+    mario_box_precise_bottom = new QGraphicsRectItem(7, 34, 16, 1, this);
+//        change_hitboxes();
 
     mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
     mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
@@ -51,8 +51,6 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 
     damage_music = new QMediaPlayer(this);
     damage_music->setMedia(QUrl("qrc:/sounds/sounds/damage.wav"));
-
-
 
     //    music = new QMediaPlayer(this);
     //    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
@@ -75,7 +73,6 @@ void Player::keyPressEvent(QKeyEvent *event)
 
     if (event->key() == Qt::Key_Space && !stopControls)
         isJumping = true;
-
 }
 
 void Player::keyReleaseEvent(QKeyEvent *event)
@@ -88,7 +85,6 @@ void Player::keyReleaseEvent(QKeyEvent *event)
 
     if (event->key() == Qt::Key_Space && !stopControls)
         isJumping = false;
-
 }
 
 void Player::movePlayer()
@@ -181,7 +177,7 @@ void Player::dying()
         isDead = true;
         stopControls = true;
         stopGravity = true;
-        music->stop();
+//        music->stop();
         mario_direction = false;
         gravityMaxSpeed = 2;
         isMovingLeft = false;
@@ -198,7 +194,7 @@ void Player::dying()
         connect(timer, &QTimer::timeout, this, &Player::die_animation_up);
         timer->start(20);
 
-        QTimer::singleShot(4000,this, &Player::restart_game);
+        QTimer::singleShot(4000, this, &Player::restart_game);
     }
 }
 
@@ -612,8 +608,7 @@ void Player::die_animation_up()
         timer->stop();
         velY = 0.2;
         timer = new QTimer(this);
-        QPixmap pix = pixmap().transformed(QTransform().scale(1, 1));
-        connect(timer, &QTimer::timeout, this, &Player::damage_animation);
+        connect(timer, &QTimer::timeout, this, &Player::die_animation_down);
         timer->start(20);
     }
 
