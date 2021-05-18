@@ -30,7 +30,7 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
     mario_box_bottom = new QGraphicsRectItem(4, 32, 24, 1, this); // Setando hitbox de baixo
     mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
     mario_box_precise_bottom = new QGraphicsRectItem(7, 34, 16, 1, this);
-//        change_hitboxes();
+
 
     mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
     mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
@@ -51,6 +51,9 @@ Player::Player(QGraphicsItem *parent) : QGraphicsPixmapItem(parent)
 
     damage_music = new QMediaPlayer(this);
     damage_music->setMedia(QUrl("qrc:/sounds/sounds/damage.wav"));
+
+    powerup = new QMediaPlayer(this);
+    powerup->setMedia(QUrl("qrc:/sounds/sounds/get_powerup.wav"));
 
     //    music = new QMediaPlayer(this);
     //    music->setMedia(QUrl("qrc:/sounds/sounds/main-theme.mp3"));
@@ -91,6 +94,7 @@ void Player::movePlayer()
 {
     if(stopGravity)
         return;
+
 
     if (isMovingLeft){
         velX += ((-1 * maxSpeed) - velX) * accl;
@@ -159,7 +163,7 @@ void Player::movePlayer()
             isAnimateToRight = false;
             isMovingRight = false;
             setZValue(-33);
-            QTimer::singleShot(3800,this, &Player::restart_game);
+            QTimer::singleShot(3500,this, &Player::restart_game);
         }
     }
 
@@ -177,7 +181,7 @@ void Player::dying()
         isDead = true;
         stopControls = true;
         stopGravity = true;
-//        music->stop();
+        //        music->stop();
         mario_direction = false;
         gravityMaxSpeed = 2;
         isMovingLeft = false;
@@ -186,7 +190,15 @@ void Player::dying()
         isAnimateToRight = false;
         isJumping = false;
         isMidJump = false;
-        setPixmap(QPixmap(":/mario/sprites/mario/mario_morrendo.png"));
+
+        if(isBig){
+            setPixmap(QPixmap(":/mario/sprites/mario/mario-big_morrendo.png"));
+
+        }else {
+            setPixmap(QPixmap(":/mario/sprites/mario/mario_morrendo.png"));
+        }
+
+
 
         dead->play();
         velY = 0.5;
@@ -209,7 +221,8 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-
+                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
+                get_powerup();
             }
 
             if (typeid(*colliding_item) == typeid(Mystery_Block) ||
@@ -242,7 +255,8 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-
+                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
+                get_powerup();
             }
             else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
@@ -278,7 +292,8 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-
+                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
+                get_powerup();
             }
             else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
@@ -296,7 +311,7 @@ void Player::colliding_block()
             }
             else if(typeid(*colliding_item) == typeid(Flag_Object)){
                 for(QGraphicsItem *flag_item : static_cast<Flag_Object *>(colliding_item)->body->collidingItems()){
-                    if( typeid(*flag_item) == typeid(Player)){
+                    if(typeid(*flag_item) == typeid(Player)){
                         if(!win){
                             winning_animation();
                             static_cast<Flag_Object *>(colliding_item)->winning();
@@ -321,7 +336,8 @@ void Player::colliding_block()
         {
             if (typeid(*colliding_item) == typeid(Mushroom_Object))
             {
-
+                static_cast<Mushroom_Object *>(colliding_item)->deleteLater();
+                get_powerup();
             }
             else if (typeid(*colliding_item) == typeid(Goomba_Mob))
             {
@@ -410,8 +426,8 @@ void Player::damage()
         QTimer::singleShot(200, this, &Player::damage_animation);
         QTimer::singleShot(400, this, &Player::damage_animation);
         QTimer::singleShot(600, this, &Player::damage_animation);
+        QTimer::singleShot(1000, this, &Player::stop_damage_animation);
         isBig = false;
-
         change_hitboxes();
 
     }else {
@@ -420,23 +436,46 @@ void Player::damage()
 
 }
 
+void Player::get_powerup()
+{
+    if(isBig)
+        return;
+
+    powerup->play();
+    setPos(x(), y()-32);
+    setPixmap(QPixmap(":/mario/sprites/mario/mario-big_parado.png"));
+    QTimer::singleShot(0, this, &Player::powerup_animation);
+    QTimer::singleShot(200, this, &Player::powerup_animation);
+    QTimer::singleShot(400, this, &Player::powerup_animation);
+    QTimer::singleShot(600, this, &Player::powerup_animation);
+    isBig = true;
+    change_hitboxes();
+}
+
 void Player::change_hitboxes()
 {
     if(isBig){
-        mario_box_left = new QGraphicsRectItem(-8, 1, 8, 60, this);   // Setando hitbox da esquerda
-        mario_box_right = new QGraphicsRectItem(32, 1, 8, 60, this);  // Setando hitbox da direita
-        mario_box_top = new QGraphicsRectItem(1, -8, 30, 8, this);    // Setando hitbox do topo
-        mario_box_bottom = new QGraphicsRectItem(1, 64, 30, 8, this); // Setando hitbox de baixo
+        mario_box_left = new QGraphicsRectItem(0, 1, 2, 62, this);   // Setando hitbox da esquerda
+        mario_box_right = new QGraphicsRectItem(30, 1, 2, 62, this);  // Setando hitbox da direita
+        mario_box_top = new QGraphicsRectItem(4, -1, 24, 1, this);    // Setando hitbox do topo
+        mario_box_bottom = new QGraphicsRectItem(4, 64, 24, 1, this); // Setando hitbox de baixo
         mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
         mario_box_precise_bottom = new QGraphicsRectItem(7, 64, 16, 1, this);
     }else {
-        mario_box_left = new QGraphicsRectItem(-8, 1, 8, 30, this);   // Setando hitbox da esquerda
-        mario_box_right = new QGraphicsRectItem(32, 1, 8, 30, this);  // Setando hitbox da direita
-        mario_box_top = new QGraphicsRectItem(1, -8, 30, 8, this);    // Setando hitbox do topo
-        mario_box_bottom = new QGraphicsRectItem(1, 32, 30, 8, this); // Setando hitbox de baixo
+        mario_box_left = new QGraphicsRectItem(0, 1, 2, 30, this);   // Setando hitbox da esquerda
+        mario_box_right = new QGraphicsRectItem(30, 1, 2, 30, this);  // Setando hitbox da direita
+        mario_box_top = new QGraphicsRectItem(4, -1, 24, 1, this);    // Setando hitbox do topo
+        mario_box_bottom = new QGraphicsRectItem(4, 32, 24, 1, this); // Setando hitbox de baixo
         mario_box_precise_top = new QGraphicsRectItem(9, -1, 12, 1, this);
-        mario_box_precise_bottom = new QGraphicsRectItem(7, 32, 16, 1, this);
+        mario_box_precise_bottom = new QGraphicsRectItem(7, 34, 16, 1, this);
     }
+
+    mario_box_bottom->setPen(Qt::NoPen); // Removendo pintura das hitboxes
+    mario_box_left->setPen(Qt::NoPen);   // Removendo pintura das hitboxes
+    mario_box_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    mario_box_right->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
+    mario_box_precise_top->setPen(Qt::NoPen);    // Removendo pintura das hitboxes
+    mario_box_precise_bottom->setPen(Qt::NoPen);  // Removendo pintura das hitboxes
 }
 
 void Player::walk_animation_1()
@@ -542,7 +581,7 @@ void Player::stop_animation()
 
 void Player::winning_animation()
 {
-    music->stop();
+    //    music->stop();
     mario_direction = false;
     stopControls = true;
     win = true;
@@ -639,4 +678,22 @@ void Player::damage_animation(){
 void Player::damage_animation_2()
 {
     setPixmap(QPixmap(":/mario/sprites/mario/mario_parado.png"));
+}
+
+void Player::stop_damage_animation()
+{
+    isTakingDamage = false;
+}
+
+void Player::powerup_animation()
+{
+    QPixmap a = pixmap();
+    a.fill(Qt::transparent);
+    setPixmap(a);
+    QTimer::singleShot(100, this, &Player::powerup_animation_2);
+}
+
+void Player::powerup_animation_2()
+{
+    setPixmap(QPixmap(":/mario/sprites/mario/mario-big_parado.png"));
 }

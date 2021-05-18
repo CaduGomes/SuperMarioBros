@@ -47,6 +47,7 @@ private:
     bool isAnimateToLeft = false;
     bool isMidJump = false;
     void damage();
+    void get_powerup();
     void change_hitboxes();
 
 
@@ -64,6 +65,7 @@ private:
     QMediaPlayer * music;
     QMediaPlayer * dead;
     QMediaPlayer * kick;
+    QMediaPlayer * powerup;
     QMediaPlayer * damage_music;
 
 private slots:
@@ -79,6 +81,10 @@ private slots:
     void walk_winning_animation_3();
     void damage_animation();
     void damage_animation_2();
+    void stop_damage_animation();
+    void powerup_animation();
+    void powerup_animation_2();
+
     void die_animation_up();
     void die_animation_down();
 
