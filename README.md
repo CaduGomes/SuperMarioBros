@@ -29,7 +29,7 @@ Features desenvolvidas:
 ## :gift: Download do jogo
 
 
-<a aria-label="Baixar Zip" target="_blank" href="https://drive.google.com/uc?export=download&confirm=dX4H&id=1hdYC6JpE-MZ3A8P77y9_v_sKTW7hNklY">
+<a aria-label="Baixar Zip" target="_blank" href="https://github.com/CaduGomes/SuperMarioBros/releases/tag/v1.0">
     <img src="https://badgen.net/badge/Baixar%20Zip/release/black">
 </a>
 
