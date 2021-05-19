@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QTimerEvent>
-#include "ISubject.h"
+#include "isubject.h"
 #include "iobserver.h"
 
 class GameDirector : public QObject, public ISubject
@@ -11,7 +11,7 @@ class GameDirector : public QObject, public ISubject
     Q_OBJECT
 public:
     explicit GameDirector(QObject *parent = nullptr);
-    void timerEvent(QTimerEvent *event);
+    void timerEvent(QTimerEvent *event) override;
 
     void attach(IObserver *observer) override;
     void detach(IObserver *observer) override;
